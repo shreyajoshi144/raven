@@ -21,7 +21,7 @@ An AI-powered personal safety platform that predicts risk, recommends safer rout
 - [Environment Variables](#environment-variables)
 - [Roadmap](#roadmap)
 - [Privacy & Security](#privacy--security)
-- [License](#license)
+
 
 ---
 
