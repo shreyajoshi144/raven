@@ -1,6 +1,5 @@
 from app.services import pr_review
 from app.services.areas import area_of, group_files, is_test_path
-from tests.test_chat import ready  # noqa: F401  (fixture)
 
 
 def test_area_classification():

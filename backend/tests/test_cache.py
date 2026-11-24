@@ -8,7 +8,7 @@ from app.services import embeddings
 from app.services import qa as qasvc
 from tests.conftest import create_analysis, emulate_n8n, new_other_client
 from tests.fakes import FakeLLM
-from tests.test_chat import ask, ready, wire  # noqa: F401  (pytest fixture + helpers)
+from tests.test_chat import ask, wire
 
 
 def _counted(orch):

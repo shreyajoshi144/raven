@@ -7,17 +7,10 @@ from app.core.db import new_session
 from app.models import ChatMessage
 from app.retrieval.search import retrieve, tokenize
 from app.services import qa as qasvc
-from tests.conftest import create_analysis, emulate_n8n, internal
+from tests.conftest import create_analysis, internal
 from tests.fakes import FakeLLM
 
 import uuid
-
-
-@pytest.fixture()
-def ready(user_client, gh_fake):
-    aid = create_analysis(user_client).json()["analysis_id"]
-    emulate_n8n(user_client, aid, gh_fake, FakeLLM())
-    return aid
 
 
 def wire(orch, user_client, llm: FakeLLM | None, monkeypatch):

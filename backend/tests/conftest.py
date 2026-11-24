@@ -119,6 +119,15 @@ def user_client(client):
     return client
 
 
+@pytest.fixture()
+def ready(user_client, gh_fake):
+    """A finished analysis of the sample repository, owned by the signed-in user."""
+    from tests.fakes import FakeLLM
+    aid = create_analysis(user_client).json()["analysis_id"]
+    emulate_n8n(user_client, aid, gh_fake, FakeLLM())
+    return aid
+
+
 def new_other_client(app, email: str) -> TestClient:
     c = TestClient(app, base_url="http://testserver")
     register(c, email)

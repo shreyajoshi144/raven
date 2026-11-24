@@ -6,7 +6,7 @@ from sqlalchemy import select
 from app.core.config import get_settings
 from app.core.db import new_session
 from app.core.errors import ApiError
-from app.models import AdminEvent, ChatMessage, User
+from app.models import ChatMessage, User
 from app.services import quotas
 from tests.conftest import create_analysis, new_other_client, register
 
