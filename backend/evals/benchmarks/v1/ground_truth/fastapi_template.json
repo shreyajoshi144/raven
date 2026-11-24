@@ -1,0 +1,1147 @@
+{
+ "repo": "fastapi_template",
+ "verification": {
+  "method": "manual",
+  "by": "Raven maintainers (authored with Claude Code, reading the source at the pinned revision)",
+  "date": "2026-10-26",
+  "independent_review": false,
+  "anchors": "every evidence span carries an anchor substring that `python -m evals validate` checks against the source"
+ },
+ "graph": {
+  "routes": {
+   "exhaustive": true,
+   "items": [
+    {
+     "method": "POST",
+     "path": "/login/access-token",
+     "handler_file": "backend/app/api/routes/login.py",
+     "decorator_line": 23,
+     "def_line": 24,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/login/test-token",
+     "handler_file": "backend/app/api/routes/login.py",
+     "decorator_line": 45,
+     "def_line": 46,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/password-recovery/{email}",
+     "handler_file": "backend/app/api/routes/login.py",
+     "decorator_line": 53,
+     "def_line": 54,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/reset-password/",
+     "handler_file": "backend/app/api/routes/login.py",
+     "decorator_line": 77,
+     "def_line": 78,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/password-recovery-html-content/{email}",
+     "handler_file": "backend/app/api/routes/login.py",
+     "decorator_line": 100,
+     "def_line": 105,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/users/",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 32,
+     "def_line": 37,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/users/",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 54,
+     "def_line": 57,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "PATCH",
+     "path": "/users/me",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 81,
+     "def_line": 82,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "PATCH",
+     "path": "/users/me/password",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 103,
+     "def_line": 104,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/users/me",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 124,
+     "def_line": 125,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "DELETE",
+     "path": "/users/me",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 132,
+     "def_line": 133,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/users/signup",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 146,
+     "def_line": 147,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/users/{user_id}",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 162,
+     "def_line": 163,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "PATCH",
+     "path": "/users/{user_id}",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 182,
+     "def_line": 187,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "DELETE",
+     "path": "/users/{user_id}",
+     "handler_file": "backend/app/api/routes/users.py",
+     "decorator_line": 214,
+     "def_line": 215,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/utils/test-email/",
+     "handler_file": "backend/app/api/routes/utils.py",
+     "decorator_line": 11,
+     "def_line": 16,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/utils/health-check/",
+     "handler_file": "backend/app/api/routes/utils.py",
+     "decorator_line": 29,
+     "def_line": 30,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/items/",
+     "handler_file": "backend/app/api/routes/items.py",
+     "decorator_line": 13,
+     "def_line": 14,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "GET",
+     "path": "/items/{id}",
+     "handler_file": "backend/app/api/routes/items.py",
+     "decorator_line": 48,
+     "def_line": 49,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/items/",
+     "handler_file": "backend/app/api/routes/items.py",
+     "decorator_line": 61,
+     "def_line": 62,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "PUT",
+     "path": "/items/{id}",
+     "handler_file": "backend/app/api/routes/items.py",
+     "decorator_line": 75,
+     "def_line": 76,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "DELETE",
+     "path": "/items/{id}",
+     "handler_file": "backend/app/api/routes/items.py",
+     "decorator_line": 99,
+     "def_line": 100,
+     "dynamic_prefix": "settings.API_V1_STR"
+    },
+    {
+     "method": "POST",
+     "path": "/private/users/",
+     "handler_file": "backend/app/api/routes/private.py",
+     "decorator_line": 23,
+     "def_line": 24,
+     "dynamic_prefix": "settings.API_V1_STR"
+    }
+   ],
+   "notes": "Full path is settings.API_V1_STR (default /api/v1) + path; Raven cannot resolve the dynamic prefix, so matching strips a leading dynamic placeholder segment."
+  },
+  "data_models": {
+   "exhaustive": true,
+   "items": [
+    {
+     "name": "UserBase",
+     "path": "backend/app/models.py",
+     "line": 13
+    },
+    {
+     "name": "UserCreate",
+     "path": "backend/app/models.py",
+     "line": 21
+    },
+    {
+     "name": "UserRegister",
+     "path": "backend/app/models.py",
+     "line": 25
+    },
+    {
+     "name": "UserUpdate",
+     "path": "backend/app/models.py",
+     "line": 32
+    },
+    {
+     "name": "UserUpdateMe",
+     "path": "backend/app/models.py",
+     "line": 40
+    },
+    {
+     "name": "UpdatePassword",
+     "path": "backend/app/models.py",
+     "line": 45
+    },
+    {
+     "name": "User",
+     "path": "backend/app/models.py",
+     "line": 51
+    },
+    {
+     "name": "UserPublic",
+     "path": "backend/app/models.py",
+     "line": 59
+    },
+    {
+     "name": "UsersPublic",
+     "path": "backend/app/models.py",
+     "line": 64
+    },
+    {
+     "name": "ItemBase",
+     "path": "backend/app/models.py",
+     "line": 70
+    },
+    {
+     "name": "ItemCreate",
+     "path": "backend/app/models.py",
+     "line": 76
+    },
+    {
+     "name": "ItemUpdate",
+     "path": "backend/app/models.py",
+     "line": 81
+    },
+    {
+     "name": "Item",
+     "path": "backend/app/models.py",
+     "line": 87
+    },
+    {
+     "name": "ItemPublic",
+     "path": "backend/app/models.py",
+     "line": 97
+    },
+    {
+     "name": "ItemsPublic",
+     "path": "backend/app/models.py",
+     "line": 103
+    },
+    {
+     "name": "Message",
+     "path": "backend/app/models.py",
+     "line": 109
+    },
+    {
+     "name": "Token",
+     "path": "backend/app/models.py",
+     "line": 114
+    },
+    {
+     "name": "TokenPayload",
+     "path": "backend/app/models.py",
+     "line": 120
+    },
+    {
+     "name": "NewPassword",
+     "path": "backend/app/models.py",
+     "line": 124
+    },
+    {
+     "name": "PrivateUserCreate",
+     "path": "backend/app/api/routes/private.py",
+     "line": 16
+    },
+    {
+     "name": "Settings",
+     "path": "backend/app/core/config.py",
+     "line": 15
+    }
+   ],
+   "notes": "Classes deriving from pydantic BaseModel / SQLModel / BaseSettings."
+  },
+  "orm_models": {
+   "exhaustive": true,
+   "items": [
+    {
+     "name": "User",
+     "path": "backend/app/models.py",
+     "line": 51
+    },
+    {
+     "name": "Item",
+     "path": "backend/app/models.py",
+     "line": 87
+    }
+   ],
+   "notes": "SQLModel classes declared with table=True."
+  },
+  "internal_imports": {
+   "exhaustive": true,
+   "items": [
+    [
+     "backend/app/alembic/env.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/alembic/env.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/deps.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/api/deps.py",
+     "backend/app/core/db.py"
+    ],
+    [
+     "backend/app/api/deps.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/app/api/deps.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/api/routes/items.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/api/routes/login.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/api/routes/private.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/api/routes/users.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/api/routes/utils.py"
+    ],
+    [
+     "backend/app/api/main.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/api/routes/items.py",
+     "backend/app/api/deps.py"
+    ],
+    [
+     "backend/app/api/routes/items.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/api/deps.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/routes/login.py",
+     "backend/app/utils.py"
+    ],
+    [
+     "backend/app/api/routes/private.py",
+     "backend/app/api/deps.py"
+    ],
+    [
+     "backend/app/api/routes/private.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/app/api/routes/private.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/api/deps.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/routes/users.py",
+     "backend/app/utils.py"
+    ],
+    [
+     "backend/app/api/routes/utils.py",
+     "backend/app/api/deps.py"
+    ],
+    [
+     "backend/app/api/routes/utils.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/api/routes/utils.py",
+     "backend/app/utils.py"
+    ],
+    [
+     "backend/app/core/db.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/core/db.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/app/core/db.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/core/security.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/crud.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/app/crud.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/app/initial_data.py",
+     "backend/app/core/db.py"
+    ],
+    [
+     "backend/app/main.py",
+     "backend/app/api/main.py"
+    ],
+    [
+     "backend/app/main.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/utils.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/app/utils.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/tests/api/routes/test_items.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/api/routes/test_items.py",
+     "backend/tests/utils/item.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/app/utils.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/tests/utils/user.py"
+    ],
+    [
+     "backend/tests/api/routes/test_login.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/api/routes/test_private.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/api/routes/test_private.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/tests/utils/user.py"
+    ],
+    [
+     "backend/tests/api/routes/test_users.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/app/core/db.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/app/main.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/tests/utils/user.py"
+    ],
+    [
+     "backend/tests/conftest.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/crud/test_user.py",
+     "backend/app/core/security.py"
+    ],
+    [
+     "backend/tests/crud/test_user.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/tests/crud/test_user.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/crud/test_user.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/utils/item.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/tests/utils/item.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/utils/item.py",
+     "backend/tests/utils/user.py"
+    ],
+    [
+     "backend/tests/utils/item.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/utils/user.py",
+     "backend/app/core/config.py"
+    ],
+    [
+     "backend/tests/utils/user.py",
+     "backend/app/crud.py"
+    ],
+    [
+     "backend/tests/utils/user.py",
+     "backend/app/models.py"
+    ],
+    [
+     "backend/tests/utils/user.py",
+     "backend/tests/utils/utils.py"
+    ],
+    [
+     "backend/tests/utils/utils.py",
+     "backend/app/core/config.py"
+    ]
+   ],
+   "notes": "Includes backend/app/api/deps.py, which uses Python 3.14 `except A, B:` syntax that Raven's Python 3.12 parser rejects."
+  },
+  "entry_points": {
+   "exhaustive": false,
+   "items": [
+    "backend/app/main.py"
+   ]
+  }
+ },
+ "qa": [
+  {
+   "id": "ft-q1",
+   "category": "auth",
+   "question": "How does the API authenticate the current user from a request?",
+   "answerable": true,
+   "expected_answer": "api/deps.py defines reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f\"{settings.API_V1_STR}/login/access-token\"). get_current_user decodes the bearer JWT with settings.SECRET_KEY and security.ALGORITHM, loads the User, and rejects missing (404) or inactive (400) users; routes receive it through the CurrentUser annotation.",
+   "key_facts": [
+    [
+     "OAuth2PasswordBearer",
+     "jwt",
+     "bearer"
+    ],
+    [
+     "get_current_user",
+     "CurrentUser"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/api/deps.py",
+     "start_line": 16,
+     "end_line": 18,
+     "anchor": "OAuth2PasswordBearer"
+    },
+    {
+     "path": "backend/app/api/deps.py",
+     "start_line": 30,
+     "end_line": 49,
+     "anchor": "def get_current_user"
+    }
+   ]
+  },
+  {
+   "id": "ft-q2",
+   "category": "security",
+   "question": "Which library and algorithms are used to hash passwords?",
+   "answerable": true,
+   "expected_answer": "pwdlib's PasswordHash configured with Argon2Hasher and BcryptHasher (app/core/security.py); get_password_hash and verify_password use it.",
+   "key_facts": [
+    [
+     "pwdlib",
+     "PasswordHash"
+    ],
+    [
+     "Argon2"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/core/security.py",
+     "start_line": 5,
+     "end_line": 16,
+     "anchor": "Argon2Hasher"
+    }
+   ]
+  },
+  {
+   "id": "ft-q3",
+   "category": "security",
+   "question": "Which algorithm signs access tokens?",
+   "answerable": true,
+   "expected_answer": "HS256 (ALGORITHM in app/core/security.py); create_access_token calls jwt.encode with settings.SECRET_KEY.",
+   "key_facts": [
+    [
+     "HS256"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/core/security.py",
+     "start_line": 19,
+     "end_line": 19,
+     "anchor": "ALGORITHM = \"HS256\""
+    },
+    {
+     "path": "backend/app/core/security.py",
+     "start_line": 22,
+     "end_line": 26,
+     "anchor": "jwt.encode"
+    }
+   ]
+  },
+  {
+   "id": "ft-q4",
+   "category": "routing",
+   "question": "What is the API version prefix and where is it applied?",
+   "answerable": true,
+   "expected_answer": "Settings.API_V1_STR defaults to /api/v1 (app/core/config.py) and app/main.py includes api_router with prefix=settings.API_V1_STR.",
+   "key_facts": [
+    [
+     "/api/v1"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/core/config.py",
+     "start_line": 22,
+     "end_line": 22,
+     "anchor": "API_V1_STR"
+    },
+    {
+     "path": "backend/app/main.py",
+     "start_line": 35,
+     "end_line": 35,
+     "anchor": "prefix=settings.API_V1_STR"
+    }
+   ]
+  },
+  {
+   "id": "ft-q5",
+   "category": "configuration",
+   "question": "How long are access tokens valid by default?",
+   "answerable": true,
+   "expected_answer": "ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 8, i.e. 8 days (app/core/config.py).",
+   "key_facts": [
+    [
+     "8 days",
+     "60 * 24 * 8",
+     "11520",
+     "eight days"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/core/config.py",
+     "start_line": 24,
+     "end_line": 25,
+     "anchor": "ACCESS_TOKEN_EXPIRE_MINUTES"
+    }
+   ]
+  },
+  {
+   "id": "ft-q6",
+   "category": "data_model",
+   "question": "Which database tables are defined?",
+   "answerable": true,
+   "expected_answer": "Two SQLModel table models in app/models.py: User and Item (both declared with table=True).",
+   "key_facts": [
+    [
+     "User"
+    ],
+    [
+     "Item"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/models.py",
+     "start_line": 51,
+     "end_line": 51,
+     "anchor": "class User(UserBase, table=True)"
+    },
+    {
+     "path": "backend/app/models.py",
+     "start_line": 87,
+     "end_line": 87,
+     "anchor": "class Item(ItemBase, table=True)"
+    }
+   ]
+  },
+  {
+   "id": "ft-q7",
+   "category": "routing",
+   "question": "When is the private router enabled?",
+   "answerable": true,
+   "expected_answer": "app/api/main.py includes private.router only when settings.FASTAPI_ENV == \"development\".",
+   "key_facts": [
+    [
+     "development"
+    ],
+    [
+     "private"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/api/main.py",
+     "start_line": 13,
+     "end_line": 14,
+     "anchor": "FASTAPI_ENV == \"development\""
+    }
+   ]
+  },
+  {
+   "id": "ft-q8",
+   "category": "security",
+   "question": "How is CORS configured?",
+   "answerable": true,
+   "expected_answer": "app/main.py adds CORSMiddleware with allow_origins=[settings.FRONTEND_HOST], allow_credentials=True and allow_methods/allow_headers ['*'].",
+   "key_facts": [
+    [
+     "CORSMiddleware"
+    ],
+    [
+     "FRONTEND_HOST"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/main.py",
+     "start_line": 27,
+     "end_line": 33,
+     "anchor": "CORSMiddleware"
+    }
+   ]
+  },
+  {
+   "id": "ft-q9",
+   "category": "auth",
+   "question": "Which routes require superuser privileges?",
+   "answerable": true,
+   "expected_answer": "Routes declared with dependencies=[Depends(get_current_active_superuser)]: GET and POST /users/, PATCH and DELETE /users/{user_id}, POST /password-recovery-html-content/{email} and POST /utils/test-email/.",
+   "key_facts": [
+    [
+     "get_current_active_superuser",
+     "superuser"
+    ],
+    [
+     "/users"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/api/routes/users.py",
+     "start_line": 32,
+     "end_line": 36,
+     "anchor": "get_current_active_superuser"
+    },
+    {
+     "path": "backend/app/api/routes/users.py",
+     "start_line": 54,
+     "end_line": 56,
+     "anchor": "get_current_active_superuser"
+    },
+    {
+     "path": "backend/app/api/routes/users.py",
+     "start_line": 182,
+     "end_line": 186,
+     "anchor": "get_current_active_superuser"
+    },
+    {
+     "path": "backend/app/api/routes/users.py",
+     "start_line": 214,
+     "end_line": 214,
+     "anchor": "get_current_active_superuser"
+    },
+    {
+     "path": "backend/app/api/routes/login.py",
+     "start_line": 100,
+     "end_line": 104,
+     "anchor": "get_current_active_superuser"
+    },
+    {
+     "path": "backend/app/api/routes/utils.py",
+     "start_line": 11,
+     "end_line": 15,
+     "anchor": "get_current_active_superuser"
+    }
+   ]
+  },
+  {
+   "id": "ft-q10",
+   "category": "security",
+   "question": "How does login avoid leaking whether an email exists through response timing?",
+   "answerable": true,
+   "expected_answer": "crud.authenticate still runs verify_password against DUMMY_HASH when no user has that email, so the response time is similar either way.",
+   "key_facts": [
+    [
+     "DUMMY_HASH",
+     "dummy"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "backend/app/crud.py",
+     "start_line": 45,
+     "end_line": 51,
+     "anchor": "DUMMY_HASH"
+    }
+   ]
+  },
+  {
+   "id": "ft-u1",
+   "category": "unanswerable",
+   "question": "How does the backend send SMS notifications through Twilio?",
+   "answerable": false,
+   "expected_answer": "The backend has no SMS or Twilio integration.",
+   "key_facts": [],
+   "evidence": []
+  },
+  {
+   "id": "ft-u2",
+   "category": "unanswerable",
+   "question": "Which Redis instance is used to cache sessions?",
+   "answerable": false,
+   "expected_answer": "The backend uses no Redis and no session cache.",
+   "key_facts": [],
+   "evidence": []
+  },
+  {
+   "id": "ft-u3",
+   "category": "unanswerable",
+   "question": "How are Stripe payments processed?",
+   "answerable": false,
+   "expected_answer": "There is no payment or Stripe code.",
+   "key_facts": [],
+   "evidence": []
+  }
+ ],
+ "readiness": {
+  "assessed_rules": [
+   "SEC-CORS-WILDCARD",
+   "SEC-WEAK-HASH",
+   "SEC-SQL-STRING-BUILD",
+   "SEC-SHELL-EXEC",
+   "SEC-TLS-VERIFY-DISABLED",
+   "SEC-YAML-LOAD",
+   "SEC-DYNAMIC-EXEC",
+   "SEC-UNSAFE-DESERIALIZE",
+   "SEC-JWT-VERIFY-DISABLED",
+   "SEC-DEBUG-MODE",
+   "SEC-HARDCODED-SECRET-DEFAULT",
+   "SEC-NO-AUTH-DETECTED",
+   "SEC-UNAUTH-MUTATION",
+   "EH-BARE-EXCEPT",
+   "EH-SWALLOWED-BROAD",
+   "EH-NO-GLOBAL-HANDLER",
+   "LOG-PRINT",
+   "LOG-NONE",
+   "TEST-NONE",
+   "MAINT-IMPORT-CYCLE"
+  ],
+  "expected": [
+   {
+    "rule": "SEC-UNAUTH-MUTATION",
+    "evidence": [
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 23,
+      "end_line": 24,
+      "anchor": "\"/login/access-token\""
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 53,
+      "end_line": 54,
+      "anchor": "\"/password-recovery/{email}\""
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 77,
+      "end_line": 78,
+      "anchor": "\"/reset-password/\""
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 146,
+      "end_line": 147,
+      "anchor": "\"/signup\""
+     },
+     {
+      "path": "backend/app/api/routes/private.py",
+      "start_line": 23,
+      "end_line": 24,
+      "anchor": "\"/users/\""
+     }
+    ]
+   },
+   {
+    "rule": "EH-NO-GLOBAL-HANDLER",
+    "evidence": []
+   }
+  ],
+  "notes": "Auth exists (deps.py OAuth2PasswordBearer + CurrentUser / get_current_active_superuser), so SEC-NO-AUTH-DETECTED is expected to be silent; the five state-changing routes without an auth dependency are public by design but match SEC-UNAUTH-MUTATION's definition. CFG-* and SEC-SECRET-LIKE-CONTENT are not assessed (settings come from pydantic BaseSettings and a root .env outside the subset; secret-likeness of test literals is subjective)."
+ },
+ "impact": [
+  {
+   "id": "ft-i1",
+   "description": "Change password hashing / token code (app/core/security.py)",
+   "changed": [
+    {
+     "path": "backend/app/core/security.py",
+     "status": "modified",
+     "additions": 4,
+     "deletions": 2
+    }
+   ],
+   "expected": {
+    "affected_modules": {
+     "exhaustive": true,
+     "semantics": "non-test modules that import a changed file directly or transitively (unbounded depth), derived from graph.internal_imports",
+     "items": [
+      "backend/app/api/deps.py",
+      "backend/app/api/main.py",
+      "backend/app/api/routes/items.py",
+      "backend/app/api/routes/login.py",
+      "backend/app/api/routes/private.py",
+      "backend/app/api/routes/users.py",
+      "backend/app/api/routes/utils.py",
+      "backend/app/core/db.py",
+      "backend/app/crud.py",
+      "backend/app/initial_data.py",
+      "backend/app/main.py",
+      "backend/app/utils.py"
+     ]
+    },
+    "routes": {
+     "exhaustive": true,
+     "semantics": "routes whose handler file is changed or in the affected set (file-level, the granularity Raven claims)",
+     "items": [
+      "DELETE /items/{id}",
+      "DELETE /users/me",
+      "DELETE /users/{user_id}",
+      "GET /items/",
+      "GET /items/{id}",
+      "GET /users/",
+      "GET /users/me",
+      "GET /users/{user_id}",
+      "GET /utils/health-check/",
+      "PATCH /users/me",
+      "PATCH /users/me/password",
+      "PATCH /users/{user_id}",
+      "POST /items/",
+      "POST /login/access-token",
+      "POST /login/test-token",
+      "POST /password-recovery-html-content/{email}",
+      "POST /password-recovery/{email}",
+      "POST /private/users/",
+      "POST /reset-password/",
+      "POST /users/",
+      "POST /users/signup",
+      "POST /utils/test-email/",
+      "PUT /items/{id}"
+     ]
+    },
+    "relevant_tests": {
+     "exhaustive": true,
+     "semantics": "every test_*.py file: all exercise authentication or password hashing, by import or through authenticated HTTP calls (manual judgement)",
+     "items": [
+      "backend/tests/api/routes/test_items.py",
+      "backend/tests/api/routes/test_login.py",
+      "backend/tests/api/routes/test_private.py",
+      "backend/tests/api/routes/test_users.py",
+      "backend/tests/crud/test_user.py"
+     ]
+    }
+   }
+  },
+  {
+   "id": "ft-i2",
+   "description": "Change the items routes (app/api/routes/items.py)",
+   "changed": [
+    {
+     "path": "backend/app/api/routes/items.py",
+     "status": "modified",
+     "additions": 5,
+     "deletions": 1
+    }
+   ],
+   "expected": {
+    "affected_modules": {
+     "exhaustive": true,
+     "semantics": "non-test modules that import a changed file directly or transitively (unbounded depth), derived from graph.internal_imports",
+     "items": [
+      "backend/app/api/main.py",
+      "backend/app/main.py"
+     ]
+    },
+    "routes": {
+     "exhaustive": true,
+     "semantics": "routes whose handler file is changed or in the affected set (file-level, the granularity Raven claims)",
+     "items": [
+      "DELETE /items/{id}",
+      "GET /items/",
+      "GET /items/{id}",
+      "POST /items/",
+      "PUT /items/{id}"
+     ]
+    },
+    "relevant_tests": {
+     "exhaustive": true,
+     "semantics": "test_items.py calls the /items routes over HTTP (manual judgement); no test imports items.py",
+     "items": [
+      "backend/tests/api/routes/test_items.py"
+     ]
+    }
+   }
+  }
+ ]
+}

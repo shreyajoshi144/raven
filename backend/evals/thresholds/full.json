@@ -1,0 +1,8 @@
+{
+ "_comment": "Gates for --suite full. Only invariants that Raven enforces in code are gated (every stored answer is schema-valid; every citation points at a real file and line range). No AI-quality floor is set: there is no live-model baseline yet. After the first reviewed live run, add floors for key-fact recall, abstention and judge scores from that baseline.",
+ "checks": [
+  {"metric": "graph.routes.recall", "min": 1.0, "required": true},
+  {"metric": "qa.structured_output_valid_rate", "min": 1.0, "required": true},
+  {"metric": "qa.citation_validity", "min": 1.0, "required": true}
+ ]
+}

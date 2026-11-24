@@ -1,0 +1,11 @@
+**/__pycache__
+**/*.pyc
+.env
+.git
+backend/tests
+e2e
+node_modules
+*.zip
+backend/evals
+web/node_modules
+web/dist

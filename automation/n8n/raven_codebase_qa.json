@@ -1,0 +1,475 @@
+{
+  "id": "raven_codebase_qa",
+  "name": "Raven - Codebase Q&A",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "raven-qa",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "cababc47-f86c-508c-bbfd-6120a1718c52",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "59aa0c88-830c-522e-9322-ee41d4d52908"
+    },
+    {
+      "parameters": {
+        "jsCode": "function eq(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let r=0;for(let i=0;i<a.length;i++)r|=a.charCodeAt(i)^b.charCodeAt(i);return r===0;}\nconst UUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;\nconst req = $input.first().json;\nconst body = req.body || {};\nconst secret = $env.RAVEN_N8N_WEBHOOK_SECRET || $env.N8N_WEBHOOK_SECRET;\nconst authorized = eq(String((req.headers || {})['x-raven-webhook-secret'] || ''), String(secret || '')) && !!secret;\nconst valid = UUID.test(String(body.analysis_id || '')) && UUID.test(String(body.message_id || ''));\nreturn [{ json: { authorized: authorized && valid, state: { analysis_id: body.analysis_id, message_id: body.message_id, execId: String($execution.id),  } } }];"
+      },
+      "id": "d60c8087-cef3-5914-89b4-5d9852ad04cf",
+      "name": "Init",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e666d2db-4c3f-555e-959b-bea55e2522c1",
+              "leftValue": "={{ $json.authorized }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "462a0519-d3cc-584a-89ea-304fbdfc84d7",
+      "name": "Authorized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ error: { code: \"UNAUTHENTICATED\" } }) }}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "df6cb541-7126-54a4-86bb-00cffe1d7d43",
+      "name": "Respond Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state;\nreturn [{ json: { state: s, req: { analysis_id: s.analysis_id, message_id: s.message_id, execution_id: s.execId } } }];"
+      },
+      "id": "9b813db0-8098-594d-9ed2-59b2acd22171",
+      "name": "Prepare Retrieve",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/qa/retrieve' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "27184844-a687-5b61-a695-063613e2257c",
+      "name": "Retrieve Evidence",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        200
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $('Prepare Retrieve').last().json.state;\nconst r = $input.first().json;\nreturn [{ json: { state: s, ok: r.statusCode === 200, status: r.statusCode || 0 } }];"
+      },
+      "id": "291b070e-39b2-5cd6-add4-25c0e595268f",
+      "name": "Eval Retrieve",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "47f6a208-4c5d-5f3e-9d99-6b8be40a9805",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c86a8b8e-fbd5-569d-9d9c-e3d99b27bdcc",
+      "name": "Retrieve OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state;\nreturn [{ json: { state: s, req: { analysis_id: s.analysis_id, message_id: s.message_id, execution_id: s.execId } } }];"
+      },
+      "id": "10652088-2432-5744-b6c0-434cf9ba456a",
+      "name": "Prepare Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/qa/answer' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 110000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "d2a7017f-d80f-568f-b4e6-5cedc05ae78b",
+      "name": "Generate Answer",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $('Prepare Answer').last().json.state;\nconst r = $input.first().json;\nreturn [{ json: { state: s, ok: r.statusCode === 200, status: r.statusCode || 0 } }];"
+      },
+      "id": "15acf575-722c-56e7-b9a5-74740d8a2184",
+      "name": "Eval Answer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1c48864-2e90-551a-b66d-039e09d2f908",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "5d1c16b9-fa79-5600-a460-ac101c524a1e",
+      "name": "Answer OK?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: \"complete\", message_id: $json.state.message_id, execution_id: $json.state.execId }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "dfbd95d7-fe66-59ed-b9ea-18f4c7b6b9ee",
+      "name": "Respond Answer",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2640,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ error: { code: \"WORKFLOW_FAILED\", retryable: true } }) }}",
+        "options": {
+          "responseCode": 502
+        }
+      },
+      "id": "7503a267-e619-5113-a5a8-b06e5462459d",
+      "name": "Respond Failure",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2640,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Init",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init": {
+      "main": [
+        [
+          {
+            "node": "Authorized?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorized?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Retrieve",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Retrieve": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Evidence": {
+      "main": [
+        [
+          {
+            "node": "Eval Retrieve",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Retrieve": {
+      "main": [
+        [
+          {
+            "node": "Retrieve OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve OK?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Answer": {
+      "main": [
+        [
+          {
+            "node": "Generate Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Answer": {
+      "main": [
+        [
+          {
+            "node": "Eval Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Answer": {
+      "main": [
+        [
+          {
+            "node": "Answer OK?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer OK?": {
+      "main": [
+        [
+          {
+            "node": "Respond Answer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "raven"
+  },
+  "tags": [],
+  "versionId": "32301af7-6132-565f-a8c2-fb3728ce7313"
+}

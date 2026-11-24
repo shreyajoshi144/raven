@@ -1,0 +1,210 @@
+{
+ "repo": "clean_service",
+ "verification": {
+  "method": "manual",
+  "by": "Raven maintainers (authored with Claude Code, reading the source at the pinned revision)",
+  "date": "2026-10-26",
+  "independent_review": false,
+  "anchors": "every evidence span carries an anchor substring that `python -m evals validate` checks against the source"
+ },
+ "graph": {
+  "routes": {
+   "exhaustive": true,
+   "items": [
+    {
+     "method": "GET",
+     "path": "/items/{item_id}",
+     "handler_file": "app/main.py",
+     "decorator_line": 18,
+     "def_line": 19
+    },
+    {
+     "method": "POST",
+     "path": "/items",
+     "handler_file": "app/main.py",
+     "decorator_line": 27,
+     "def_line": 28
+    }
+   ]
+  },
+  "data_models": {
+   "exhaustive": true,
+   "items": []
+  },
+  "orm_models": {
+   "exhaustive": true,
+   "items": []
+  },
+  "internal_imports": {
+   "exhaustive": true,
+   "items": [
+    [
+     "app/main.py",
+     "app/store.py"
+    ],
+    [
+     "app/main.py",
+     "app/settings.py"
+    ],
+    [
+     "app/store.py",
+     "app/settings.py"
+    ],
+    [
+     "tests/test_store.py",
+     "app/store.py"
+    ],
+    [
+     "tests/test_main.py",
+     "app/main.py"
+    ]
+   ]
+  },
+  "entry_points": {
+   "exhaustive": false,
+   "items": [
+    "app/main.py"
+   ]
+  }
+ },
+ "qa": [
+  {
+   "id": "clean-q1",
+   "category": "auth",
+   "question": "How is the API token checked?",
+   "answerable": true,
+   "expected_answer": "require_token compares the X-API-Token header with get_api_token() (read from the API_TOKEN environment variable) and raises 401 when they differ; both routes depend on it.",
+   "key_facts": [
+    [
+     "require_token"
+    ],
+    [
+     "401"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/main.py",
+     "start_line": 13,
+     "end_line": 15,
+     "anchor": "def require_token"
+    },
+    {
+     "path": "app/settings.py",
+     "start_line": 8,
+     "end_line": 12,
+     "anchor": "API_TOKEN"
+    }
+   ]
+  },
+  {
+   "id": "clean-q2",
+   "category": "error_handling",
+   "question": "What happens when adding a duplicate item?",
+   "answerable": true,
+   "expected_answer": "add_item catches sqlite3.IntegrityError, logs a 'duplicate item' warning and re-raises.",
+   "key_facts": [
+    [
+     "IntegrityError"
+    ],
+    [
+     "warning",
+     "log"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/store.py",
+     "start_line": 22,
+     "end_line": 26,
+     "anchor": "IntegrityError"
+    }
+   ]
+  },
+  {
+   "id": "clean-u1",
+   "category": "unanswerable",
+   "question": "Which message queue does the service publish events to?",
+   "answerable": false,
+   "expected_answer": "The service publishes no events; there is no message queue.",
+   "key_facts": [],
+   "evidence": []
+  }
+ ],
+ "readiness": {
+  "assessed_rules": [
+   "SEC-CORS-WILDCARD",
+   "SEC-WEAK-HASH",
+   "SEC-SQL-STRING-BUILD",
+   "SEC-SHELL-EXEC",
+   "SEC-TLS-VERIFY-DISABLED",
+   "SEC-YAML-LOAD",
+   "SEC-DYNAMIC-EXEC",
+   "SEC-UNSAFE-DESERIALIZE",
+   "SEC-JWT-VERIFY-DISABLED",
+   "SEC-DEBUG-MODE",
+   "SEC-HARDCODED-SECRET-DEFAULT",
+   "SEC-NO-AUTH-DETECTED",
+   "SEC-UNAUTH-MUTATION",
+   "EH-BARE-EXCEPT",
+   "EH-SWALLOWED-BROAD",
+   "EH-NO-GLOBAL-HANDLER",
+   "LOG-PRINT",
+   "LOG-NONE",
+   "TEST-NONE",
+   "MAINT-IMPORT-CYCLE",
+   "CFG-REQUIRED-ENV-AT-IMPORT",
+   "CFG-UNDOCUMENTED-ENV",
+   "CFG-NO-ENV-TEMPLATE",
+   "TEST-UNREACHED-ROUTER",
+   "TEST-UNREACHED-OTHER"
+  ],
+  "expected": [
+   {
+    "rule": "EH-NO-GLOBAL-HANDLER",
+    "evidence": []
+   }
+  ],
+  "notes": "Deliberately clean: every other assessed rule must stay silent (false-positive check)."
+ },
+ "impact": [
+  {
+   "id": "clean-i1",
+   "description": "Change the settings module",
+   "changed": [
+    {
+     "path": "app/settings.py",
+     "status": "modified",
+     "additions": 2,
+     "deletions": 1
+    }
+   ],
+   "expected": {
+    "affected_modules": {
+     "exhaustive": true,
+     "semantics": "non-test modules that import a changed file directly or transitively (unbounded depth), derived from graph.internal_imports",
+     "items": [
+      "app/main.py",
+      "app/store.py"
+     ]
+    },
+    "routes": {
+     "exhaustive": true,
+     "semantics": "routes whose handler file is changed or in the affected set (file-level, the granularity Raven claims)",
+     "items": [
+      "GET /items/{item_id}",
+      "POST /items"
+     ]
+    },
+    "relevant_tests": {
+     "exhaustive": true,
+     "semantics": "test files whose tests import changed/affected code (manual judgement)",
+     "items": [
+      "tests/test_main.py",
+      "tests/test_store.py"
+     ]
+    }
+   }
+  }
+ ]
+}

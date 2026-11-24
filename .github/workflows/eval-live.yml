@@ -1,0 +1,39 @@
+# Opt-in live-model evaluation: Raven's AI answer path + DeepEval judge. Costs money; never runs on push or pull_request.
+# Requires repository secrets LLM_API_KEY (Raven's model) and ANTHROPIC_API_KEY (judge); keys are read from the environment only.
+name: eval-live
+on:
+  workflow_dispatch:
+    inputs:
+      llm_model: { description: "Raven answer model (LLM_MODEL)", default: "claude-sonnet-5-5", required: true }
+      judge_model: { description: "Judge model (EVAL_JUDGE_MODEL)", default: "claude-opus-5-5", required: true }
+      repeats: { description: "Repeats (reproducibility)", default: "1", required: true }
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: raven, POSTGRES_PASSWORD: raven_dev_pw, POSTGRES_DB: raven_eval }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U raven" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      EVAL_DATABASE_URL: postgresql://raven:raven_dev_pw@127.0.0.1:5432/raven_eval
+      LLM_PROVIDER: anthropic
+      LLM_MODEL: ${{ inputs.llm_model }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      EVAL_JUDGE_PROVIDER: anthropic
+      EVAL_JUDGE_MODEL: ${{ inputs.judge_model }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      EVAL_JUDGE_PER_MINUTE: "20"
+      EVAL_SUT_PER_MINUTE: "30"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r backend/requirements-dev.txt && pip install -r backend/requirements-eval.txt
+      - run: python -m evals run --suite full --sut live --repeats ${{ inputs.repeats }} --out eval-results
+        working-directory: backend
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: eval-live, path: backend/eval-results, if-no-files-found: ignore }

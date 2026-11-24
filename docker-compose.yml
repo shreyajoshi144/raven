@@ -1,0 +1,171 @@
+# Raven — API + worker + PostgreSQL + n8n. Start with:  cp .env.example .env && ./scripts/generate-secrets.sh >> .env  (then edit) && docker compose up -d --build
+name: raven
+
+x-raven-env: &raven-env
+  APP_ENV: production
+  DATABASE_URL: postgresql://raven:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/raven
+  APP_SECRET_KEY: ${APP_SECRET_KEY:?set APP_SECRET_KEY in .env}
+  INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET:?set INTERNAL_SERVICE_SECRET in .env}
+  N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:?set N8N_WEBHOOK_SECRET in .env}
+  N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?set N8N_ENCRYPTION_KEY in .env}
+  N8N_BASE_URL: http://n8n:5678
+  LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+  LLM_API_KEY: ${LLM_API_KEY:-}
+  LLM_MODEL: ${LLM_MODEL:-}
+  GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+  ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+  COOKIE_SECURE: ${COOKIE_SECURE:-true}
+  MAX_CONCURRENT_ANALYSES: ${MAX_CONCURRENT_ANALYSES:-2}
+  MAX_ANALYSIS_SECONDS: ${MAX_ANALYSIS_SECONDS:-600}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  REQUIRE_EMAIL_VERIFICATION: ${REQUIRE_EMAIL_VERIFICATION:-false}   # true for public sign-ups (needs SMTP_HOST)
+  APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8000}               # used in emailed links
+  SMTP_HOST: ${SMTP_HOST:-}
+  SMTP_PORT: ${SMTP_PORT:-587}
+  SMTP_USER: ${SMTP_USER:-}
+  SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+  SMTP_FROM: ${SMTP_FROM:-Raven <no-reply@localhost>}
+  LLM_FALLBACK_PROVIDER: ${LLM_FALLBACK_PROVIDER:-}
+  LLM_FALLBACK_MODEL: ${LLM_FALLBACK_MODEL:-}
+  LLM_FALLBACK_API_KEY: ${LLM_FALLBACK_API_KEY:-}
+  LLM_BASE_URL: ${LLM_BASE_URL:-https://api.anthropic.com}
+  LLM_FALLBACK_BASE_URL: ${LLM_FALLBACK_BASE_URL:-}
+  LLM_PRICE_INPUT_PER_MTOK: ${LLM_PRICE_INPUT_PER_MTOK:-}
+  LLM_PRICE_OUTPUT_PER_MTOK: ${LLM_PRICE_OUTPUT_PER_MTOK:-}
+  EMBEDDINGS_BASE_URL: ${EMBEDDINGS_BASE_URL:-}
+  EMBEDDINGS_MODEL: ${EMBEDDINGS_MODEL:-}
+  EMBEDDINGS_API_KEY: ${EMBEDDINGS_API_KEY:-}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: raven
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: raven
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U raven -d raven"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [internal]
+    # No published port: only reachable on the internal network.
+
+  migrate:
+    build: { context: ., dockerfile: infra/Dockerfile }
+    command: ["alembic", "upgrade", "head"]
+    environment: *raven-env
+    depends_on: { postgres: { condition: service_healthy } }
+    restart: "no"
+    networks: [internal]
+
+  api:
+    build: { context: ., dockerfile: infra/Dockerfile }
+    restart: unless-stopped
+    environment: *raven-env
+    depends_on:
+      postgres: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    ports: ["127.0.0.1:${RAVEN_PORT:-8000}:8000"]   # put a TLS reverse proxy in front; see docs/DEPLOYMENT.md
+    mem_limit: 768m
+    networks: [internal]
+
+  worker:
+    build: { context: ., dockerfile: infra/Dockerfile }
+    command: ["python", "-m", "app.workers.main"]
+    restart: unless-stopped
+    environment: *raven-env
+    depends_on:
+      postgres: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    stop_grace_period: 45s
+    mem_limit: 1536m
+    healthcheck:
+      test: [ "NONE" ]
+    networks: [internal]
+
+  n8n:
+    image: n8nio/n8n:2.43.4
+    restart: unless-stopped
+    environment:
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?set N8N_ENCRYPTION_KEY in .env}
+      N8N_HOST: localhost
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: http
+      N8N_SELF_URL: http://localhost:5678
+      WEBHOOK_URL: http://n8n:5678/
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"       # workflows read the two service secrets below from the environment
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_VERSION_NOTIFICATIONS_ENABLED: "false"
+      N8N_PERSONALIZATION_ENABLED: "false"
+      N8N_METRICS: "false"
+      EXECUTIONS_DATA_PRUNE: "true"
+      EXECUTIONS_DATA_MAX_AGE: "168"
+      GENERIC_TIMEZONE: UTC
+      RAVEN_API_BASE_URL: http://api:8000
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+      N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET}
+      RAVEN_MAX_ANALYSIS_SECONDS: ${MAX_ANALYSIS_SECONDS:-600}
+    entrypoint: ["/bin/sh", "/raven/n8n-entrypoint.sh"]
+    volumes:
+      - n8ndata_v2:/home/node/.n8n
+      - ./automation/n8n:/raven/workflows:ro
+      - ./infra/n8n-entrypoint.sh:/raven/n8n-entrypoint.sh:ro
+    ports: ["127.0.0.1:${N8N_EDITOR_PORT:-5678}:5678"]   # editor bound to localhost only; never expose publicly
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:5678/healthz || exit 1"]
+      interval: 10s
+      timeout: 4s
+      retries: 20
+    mem_limit: 1g
+    networks: [internal]
+
+  caddy:                      # optional: docker compose --profile proxy up -d  (automatic HTTPS; blocks /internal/ and API docs)
+    image: caddy:2-alpine
+    profiles: ["proxy"]
+    restart: unless-stopped
+    environment: { RAVEN_DOMAIN: "${RAVEN_DOMAIN:-localhost}" }
+    volumes: ["./infra/Caddyfile:/etc/caddy/Caddyfile:ro", "caddydata:/data"]
+    ports: ["80:80", "443:443"]
+    depends_on: [api]
+    networks: [internal]
+
+  backup:                     # optional: docker compose --profile backup up -d  (daily pg_dump to the backups volume + housekeeping)
+    image: postgres:16-alpine
+    profiles: ["backup"]
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/raven/backup.sh"]
+    environment:
+      PGHOST: postgres
+      PGUSER: raven
+      PGDATABASE: raven
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      BACKUP_KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+      ANALYSIS_RETENTION_DAYS: ${ANALYSIS_RETENTION_DAYS:-0}
+    volumes: ["./infra/backup.sh:/raven/backup.sh:ro", "backups:/backups"]
+    depends_on: { postgres: { condition: service_healthy } }
+    networks: [internal]
+
+  monitor:                    # optional: docker compose --profile monitor up -d  (webhook alerts on failing health checks)
+    image: curlimages/curl:8.10.1
+    profiles: ["monitor"]
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/raven/monitor.sh"]
+    environment:
+      RAVEN_URL: http://api:8000
+      ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+    volumes: ["./infra/monitor.sh:/raven/monitor.sh:ro"]
+    depends_on: [api]
+    networks: [internal]
+
+volumes:
+  pgdata:
+  n8ndata:
+  n8ndata_v2:
+  caddydata:
+  backups:
+
+networks:
+  internal:

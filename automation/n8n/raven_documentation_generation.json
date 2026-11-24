@@ -1,0 +1,1120 @@
+{
+  "id": "raven_documentation_generation",
+  "name": "Raven - Documentation Generation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "raven-docs",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "9e1141a9-4511-509c-955f-cc644c048997",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "3041e01a-22b6-5427-9cea-582474106d56"
+    },
+    {
+      "parameters": {
+        "jsCode": "function eq(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let r=0;for(let i=0;i<a.length;i++)r|=a.charCodeAt(i)^b.charCodeAt(i);return r===0;}\nconst UUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;\nconst req = $input.first().json;\nconst body = req.body || {};\nconst secret = $env.RAVEN_N8N_WEBHOOK_SECRET || $env.N8N_WEBHOOK_SECRET;\nconst authorized = eq(String((req.headers || {})['x-raven-webhook-secret'] || ''), String(secret || '')) && !!secret;\nconst valid = UUID.test(String(body.analysis_id || '')) && UUID.test(String(body.doc_id || ''));\nreturn [{ json: { authorized: authorized && valid, state: { analysis_id: body.analysis_id, doc_id: body.doc_id, execId: String($execution.id), step: 'explain', dispatchTries: 0, polls: 0, attempt: 0 } } }];"
+      },
+      "id": "03dcebe3-af7f-5d9a-b866-d79bc7bab61c",
+      "name": "Init",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5378c8b4-e8f1-5a24-8aea-9b2d625e4356",
+              "leftValue": "={{ $json.authorized }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "43bef47e-f3ba-5be8-a7fa-f5b30ffefd5d",
+      "name": "Authorized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ accepted: true, execution_id: $execution.id }) }}",
+        "options": {
+          "responseCode": 202
+        }
+      },
+      "id": "74024682-a3c7-5e72-9f89-bd9d902f2ced",
+      "name": "Respond Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ error: \"unauthorized\" }) }}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "03044d7a-91ac-5db4-b539-d38ca9e9d2db",
+      "name": "Respond Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state || $('Init').first().json.state;\nconst kind = s.step === 'explain' ? 'docs_explain' : 'docs_assemble';\nconst key = s.execId + ':' + kind + ':' + s.attempt + ':' + s.dispatchTries;\nreturn [{ json: { state: s, req: { kind, workflow: 'raven_documentation_generation', execution_id: s.execId, doc_id: s.doc_id, idempotency_key: key } } }];"
+      },
+      "id": "62fa7066-c3ee-5b8d-be76-4056825f4066",
+      "name": "Prepare Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/dispatch' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "afb625b2-5292-53f3-a094-7791a252cf5d",
+      "name": "Dispatch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        300
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Dispatch').last().json.state };\nconst r = $input.first().json;\nif (r.statusCode === 200) return [{ json: { state: s, next: 'ok' } }];\nif ([401, 404, 409, 422].includes(r.statusCode)) return [{ json: { state: s, next: 'stop' } }];\ns.dispatchTries = (s.dispatchTries || 0) + 1;\nif (s.dispatchTries >= 4) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'dispatch-docs' } }];\nreturn [{ json: { state: s, next: 'retry', waitSeconds: Math.min(30, 2 ** s.dispatchTries * 2) } }];"
+      },
+      "id": "ea4321e7-8342-5674-884b-34fb4ae5aa01",
+      "name": "Eval Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6109e232-e8d7-526f-b208-beae39f1a9b4",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6543a5cf-b976-5fd5-8c86-7f92275bc0fe",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f6b6ee8f-6c07-51c4-9f81-cffbc1bc61a3",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7e8ccd2f-5669-53f6-9e62-1312b2738fa5",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f34aa7cc-7673-56fd-832a-f70f00d19c9b",
+      "name": "Route Dispatch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "ad0b5719-55d5-5d07-872a-3b8dcb176cd7",
+      "name": "Wait Dispatch Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        460
+      ],
+      "webhookId": "ad0b5719-55d5-5d07-872a-3b8dcb176cd7"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 3,
+        "unit": "seconds"
+      },
+      "id": "3a2ca7c3-979d-5ab8-b2fc-6f859624fc29",
+      "name": "Wait Before Poll",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        120
+      ],
+      "webhookId": "3a2ca7c3-979d-5ab8-b2fc-6f859624fc29"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$input.first().json.state }; s.polls = (s.polls || 0) + 1;\nreturn [{ json: { state: s } }];"
+      },
+      "id": "ea3ac117-bf7e-546f-ad28-dc554ac29645",
+      "name": "Prepare Poll",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/status?doc_id=' + $json.state.doc_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "30d1fb08-bb0b-5d6b-bbcd-f0a26d8fdc85",
+      "name": "Poll Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2400,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Poll').last().json.state };\nconst r = $input.first().json;\nconst maxPolls = Math.ceil(((Number($env.RAVEN_MAX_DOCS_SECONDS) || 900) + 60) / 3);\nif (r.statusCode !== 200 || !r.body) {\n  s.errors = (s.errors || 0) + 1;\n  if (s.errors > 8) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'poll-docs' } }];\n  return [{ json: { state: s, next: 'working' } }];\n}\ns.errors = 0;\nconst b = r.body;\nconst kind = s.step === 'explain' ? 'docs_explain' : 'docs_assemble';\nconst t = (b.doc_tasks || {})[kind];\nif (b.state === 'FAILED' || b.state === 'CANCELLED') return [{ json: { state: s, next: 'stop' } }];\nif (b.state === 'RETRYING') { s.attempt = (b.attempt || 0) + 1; s.dispatchTries = 0; return [{ json: { state: s, next: 'retrying', waitSeconds: Math.max(1, Math.ceil(b.retry_in_seconds || 1)) } }]; }\nif (t === 'failed') return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: kind } }];\nif (t === 'done') {\n  if (s.step === 'explain') { s.step = 'assemble'; s.polls = 0; s.dispatchTries = 0; return [{ json: { state: s, next: 'next_step' } }]; }\n  if (b.docs && (b.docs.status === 'READY' || b.docs.status === 'PARTIAL')) return [{ json: { state: s, next: 'complete' } }];\n}\nif (s.polls >= maxPolls) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_TIMEOUT', stage: kind } }];\nreturn [{ json: { state: s, next: 'working' } }];"
+      },
+      "id": "bc34893d-9222-5548-b999-390f1c57791e",
+      "name": "Eval Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "31fae1c2-b3e4-55c6-acea-d8491b60016d",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "working",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "working"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eed35046-b308-52c6-a778-b56bd3c87fc7",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retrying",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retrying"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1728ba6a-9541-5a95-9b78-0526c65bf71e",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "next_step",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "next_step"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "27693b83-c58b-5313-bdb2-9be34ddf7edf",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "complete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "complete"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "701eae1d-a1d9-53c3-8930-ae9e5a464c6d",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0f35d27e-6769-56a9-8f70-deb69c6432ff",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b49d949d-956c-5bdf-93e3-1ae2e75fd6c9",
+      "name": "Route Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2880,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "e2af1482-7df0-5b3b-b646-e89a56d763cc",
+      "name": "Wait Backoff",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        300
+      ],
+      "webhookId": "e2af1482-7df0-5b3b-b646-e89a56d763cc"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state;\nreturn [{ json: { state: s, req: { doc_id: s.doc_id, workflow: 'raven_documentation_generation', execution_id: s.execId, idempotency_key: s.execId + ':complete' } } }];"
+      },
+      "id": "8a2c3a16-53ca-5d62-9c13-461e88591b54",
+      "name": "Prepare Complete",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/complete' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "e15b15d2-e228-5c8e-b3ee-562c6ba5bd73",
+      "name": "Complete",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3360,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Complete').last().json.state };\nconst r = $input.first().json;\nif (r.statusCode === 200) return [{ json: { state: s, next: 'ok' } }];\ns.completeTries = (s.completeTries || 0) + 1;\nif (r.statusCode === 409 || s.completeTries >= 4) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'complete' } }];\nreturn [{ json: { state: s, next: 'retry', waitSeconds: 3 } }];"
+      },
+      "id": "af62681f-7eb0-5ea9-b42b-fe1803bc2b97",
+      "name": "Eval Complete",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "04908fa1-cac4-5810-9e24-661e8ee9239b",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2113c184-90c0-598c-8da2-917475d9c36e",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "56be4e4d-1f93-5605-9bd1-a6d2223a5d08",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "688e9e5d-8674-5e04-847f-3ed1451bcfd9",
+      "name": "Route Complete",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "1f9d2d97-1cc8-544e-b8ee-72af096b3169",
+      "name": "Wait Complete Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4080,
+        100
+      ],
+      "webhookId": "1f9d2d97-1cc8-544e-b8ee-72af096b3169"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst s = j.state;\nreturn [{ json: { state: s, req: { error_code: j.code || 'WORKFLOW_FAILED', stage: j.stage || 'docs', workflow: 'raven_documentation_generation', execution_id: s.execId, doc_id: s.doc_id, idempotency_key: s.execId + ':fail:' + (j.stage || 'x') } } }];"
+      },
+      "id": "67e82987-7b91-5bc2-87be-f3c67bbf6eae",
+      "name": "Prepare Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/fail' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "019b56fe-60fb-5dea-af17-b533c2d6545d",
+      "name": "Report Failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3360,
+        700
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "40a65e3a-9a84-5dc3-b41e-78b9519191a1",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "0fdb9834-81d4-5c0b-a42c-8f1d6ae7a9b1",
+      "name": "Stopped",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3360,
+        460
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Init",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init": {
+      "main": [
+        [
+          {
+            "node": "Authorized?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorized?": {
+      "main": [
+        [
+          {
+            "node": "Respond Accepted",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Eval Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Route Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Wait Before Poll",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Dispatch Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stopped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Dispatch Retry": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before Poll": {
+      "main": [
+        [
+          {
+            "node": "Prepare Poll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Poll": {
+      "main": [
+        [
+          {
+            "node": "Poll Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Status": {
+      "main": [
+        [
+          {
+            "node": "Eval Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Status": {
+      "main": [
+        [
+          {
+            "node": "Route Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Status": {
+      "main": [
+        [
+          {
+            "node": "Wait Before Poll",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Backoff",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Complete",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stopped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Backoff": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Complete": {
+      "main": [
+        [
+          {
+            "node": "Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complete": {
+      "main": [
+        [
+          {
+            "node": "Eval Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Complete": {
+      "main": [
+        [
+          {
+            "node": "Route Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Complete": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Complete Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Complete Retry": {
+      "main": [
+        [
+          {
+            "node": "Prepare Complete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Failure": {
+      "main": [
+        [
+          {
+            "node": "Report Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Failure": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "raven"
+  },
+  "tags": [],
+  "versionId": "b7b8d703-5a60-5631-a55c-c515c456d91f"
+}

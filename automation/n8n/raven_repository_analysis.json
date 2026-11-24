@@ -1,0 +1,1357 @@
+{
+  "id": "raven_repository_analysis",
+  "name": "Raven - Repository Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "raven-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "93c10938-ddc2-55ef-bfcf-72bc8de3fd6e",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "39d2913a-be9b-5dd0-861d-15d45967be55"
+    },
+    {
+      "parameters": {
+        "jsCode": "function eq(a,b){if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let r=0;for(let i=0;i<a.length;i++)r|=a.charCodeAt(i)^b.charCodeAt(i);return r===0;}\nconst UUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;\nconst req = $input.first().json;\nconst body = req.body || {};\nconst secret = $env.RAVEN_N8N_WEBHOOK_SECRET || $env.N8N_WEBHOOK_SECRET;\nconst authorized = eq(String((req.headers || {})['x-raven-webhook-secret'] || ''), String(secret || '')) && !!secret;\nconst valid = UUID.test(String(body.analysis_id || ''));\nreturn [{ json: { authorized: authorized && valid, state: { analysis_id: body.analysis_id, execId: String($execution.id), dispatchTries: 0, polls: 0, triggerTries: 0, attempt: 0 } } }];"
+      },
+      "id": "794dfc99-1426-5a1a-9f85-5d54f9b225e0",
+      "name": "Init",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "89817e74-fadc-52ea-a885-f0f08119a4af",
+              "leftValue": "={{ $json.authorized }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7a38ed85-9f0a-52fa-9754-dc96ab4763d5",
+      "name": "Authorized?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ accepted: true, execution_id: $execution.id }) }}",
+        "options": {
+          "responseCode": 202
+        }
+      },
+      "id": "4074b729-7996-5791-b69e-a27b82b2f6ad",
+      "name": "Respond Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ error: \"unauthorized\" }) }}",
+        "options": {
+          "responseCode": 401
+        }
+      },
+      "id": "d5750b7a-6b15-5194-8702-c1ffe641f561",
+      "name": "Respond Unauthorized",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state || $('Init').first().json.state;\nconst key = s.execId + ':dispatch:' + s.attempt + ':' + s.dispatchTries;\nreturn [{ json: { state: s, req: { kind: 'analysis', workflow: 'raven_repository_analysis', execution_id: s.execId, idempotency_key: key } } }];"
+      },
+      "id": "fbace371-c5d8-5195-a746-fe8781696be4",
+      "name": "Prepare Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/dispatch' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "a4e4e1be-8afe-563f-83f9-a9ccdb866cf4",
+      "name": "Dispatch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1200,
+        300
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Prepare Dispatch').last().json.state;\nconst r = $input.first().json;\nconst s = { ...prev };\nconst status = r.statusCode;\nif (status === 200) return [{ json: { state: s, next: 'ok' } }];\nif (status === 409 || status === 404 || status === 401 || status === 422) return [{ json: { state: s, next: 'stop', reason: 'dispatch rejected: ' + status } }];\ns.dispatchTries = (s.dispatchTries || 0) + 1;\nif (s.dispatchTries >= 4) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'dispatch' } }];\nreturn [{ json: { state: s, next: 'retry', waitSeconds: Math.min(30, 2 ** s.dispatchTries * 2) } }];"
+      },
+      "id": "5559de0d-d766-5f77-afec-5cb0136c1bce",
+      "name": "Eval Dispatch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "42f485ef-8b27-5a8e-a4dd-0a5515916cd0",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "95792f73-34ad-5eb5-9eaa-46afcbacdb6a",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "96196d0d-942c-5985-a0c9-e25111bc1176",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b7edc17b-e814-59b6-a594-34d6c4777d83",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "917d2696-dafc-52e4-bde2-880267fb7164",
+      "name": "Route Dispatch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "a9e0b1ab-81b4-52d9-9a7e-c09cc5c65a75",
+      "name": "Wait Dispatch Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        460
+      ],
+      "webhookId": "a9e0b1ab-81b4-52d9-9a7e-c09cc5c65a75"
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 4,
+        "unit": "seconds"
+      },
+      "id": "52c42c4a-a75c-5a94-9c42-707584deb186",
+      "name": "Wait Before Poll",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        120
+      ],
+      "webhookId": "52c42c4a-a75c-5a94-9c42-707584deb186"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$input.first().json.state }; s.polls = (s.polls || 0) + 1;\nreturn [{ json: { state: s } }];"
+      },
+      "id": "1823a7f1-1e7e-5bc7-909e-7130dd3bcd10",
+      "name": "Prepare Poll",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/status' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "a4dc6075-98f1-5fe1-930b-21c72395b824",
+      "name": "Poll Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2400,
+        120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Poll').last().json.state };\nconst r = $input.first().json;\nconst maxPolls = Math.ceil(((Number($env.RAVEN_MAX_ANALYSIS_SECONDS) || 600) + 120) / 4);\nif (r.statusCode !== 200 || !r.body) {\n  s.errors = (s.errors || 0) + 1;\n  if (s.errors > 8) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'poll' } }];\n  return [{ json: { state: s, next: 'working' } }];\n}\nconst b = r.body;\ns.errors = 0;\nif (b.state === 'FAILED' || b.state === 'CANCELLED' || b.state === 'READY') return [{ json: { state: s, next: 'stop', reason: 'job is ' + b.state } }];\nif (b.state === 'RETRYING') { s.attempt = b.attempt + 1; s.dispatchTries = 0; return [{ json: { state: s, next: 'retrying', waitSeconds: Math.max(1, Math.ceil(b.retry_in_seconds || 1)) } }]; }\nif (b.state === 'BUILDING_GRAPH' && b.graph_complete) return [{ json: { state: s, next: 'graph_ready' } }];\nif (b.state === 'GENERATING_DOCS') return [{ json: { state: s, next: 'graph_ready' } }];\nif (s.polls >= maxPolls) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_TIMEOUT', stage: 'poll' } }];\nreturn [{ json: { state: s, next: 'working' } }];"
+      },
+      "id": "60214f3a-1dcf-5ccf-9fd0-7aa52a21d71b",
+      "name": "Eval Status",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2640,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ab1ff90f-284b-5ba3-b1e3-bc16409ea6f1",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "working",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "working"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f1c1ebd9-1d56-55a6-9c17-e8efa73770ef",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retrying",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retrying"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b8141442-8b30-583b-8eba-2fbacdd71a69",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "graph_ready",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "graph_ready"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9b04cb2b-a399-566f-b3f7-05f5e12f56bb",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e640cda6-c575-5ba2-8150-65897678771a",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c6582cf5-6642-55d1-a90a-3ca5ce79e175",
+      "name": "Route Status",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2880,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "d1237287-c3e2-5993-bbbf-89ff0a725ad3",
+      "name": "Wait Backoff",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        300
+      ],
+      "webhookId": "d1237287-c3e2-5993-bbbf-89ff0a725ad3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $input.first().json.state;\nreturn [{ json: { state: s, req: { stage: 'graph', workflow: 'raven_repository_analysis', execution_id: s.execId, idempotency_key: s.execId + ':graph' } } }];"
+      },
+      "id": "c3a40577-f393-5bad-9afe-941553f1f279",
+      "name": "Prepare Stage Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/stage-result' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "d55e8197-cbf0-50a6-b18b-0e3b5249486d",
+      "name": "Stage Result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3360,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Stage Result').last().json.state };\nconst r = $input.first().json;\nif (r.statusCode === 200 && r.body && r.body.doc_id) { s.doc_id = r.body.doc_id; return [{ json: { state: s, next: 'ok' } }]; }\nif (r.statusCode === 409) return [{ json: { state: s, next: 'stop', reason: 'stage-result rejected' } }];\ns.stageTries = (s.stageTries || 0) + 1;\nif (s.stageTries >= 4) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'stage-result' } }];\nreturn [{ json: { state: s, next: 'retry', waitSeconds: 3 } }];"
+      },
+      "id": "1b1f0fe4-7263-5568-ad2c-6e21d19c3ca4",
+      "name": "Eval Stage Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b457d408-0ad8-5365-bd93-e23a058a36f6",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2932441d-4c48-5870-9fe5-20c909a6333d",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bd272dc5-b591-5d15-b7fb-3249fec85fe6",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "stop",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "687ac088-36f6-508b-88e2-9e82fd6126bb",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bac0db0e-0e70-5e2e-ba5c-c572279bca81",
+      "name": "Route Stage Result",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3840,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "c0b17396-24e7-5c2d-b639-7374bfc1e5d5",
+      "name": "Wait Stage Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4080,
+        140
+      ],
+      "webhookId": "c0b17396-24e7-5c2d-b639-7374bfc1e5d5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$input.first().json.state };\ns.triggerTries = (s.triggerTries || 0) + 1;\nreturn [{ json: { state: s, req: { analysis_id: s.analysis_id, doc_id: s.doc_id } } }];"
+      },
+      "id": "503b5bd6-9cf1-5921-9a35-41ba32834205",
+      "name": "Prepare Docs Trigger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4080,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.N8N_SELF_URL || 'http://localhost:5678') + '/webhook/raven-docs' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Raven-Webhook-Secret",
+              "value": "={{ $env.RAVEN_N8N_WEBHOOK_SECRET || $env.N8N_WEBHOOK_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "376924ed-3557-56cd-a348-af1f5480c942",
+      "name": "Trigger Docs Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4320,
+        -120
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = { ...$('Prepare Docs Trigger').last().json.state };\nconst r = $input.first().json;\nif (r.statusCode >= 200 && r.statusCode < 300) return [{ json: { state: s, next: 'ok' } }];\nif (s.triggerTries >= 4) return [{ json: { state: s, next: 'fail', code: 'WORKFLOW_FAILED', stage: 'trigger-docs' } }];\nreturn [{ json: { state: s, next: 'retry', waitSeconds: 3 * s.triggerTries } }];"
+      },
+      "id": "211cecf5-e43d-5126-b73b-a7013073b0f7",
+      "name": "Eval Docs Trigger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4560,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7f4db8de-1e16-5fd7-acba-687855032a13",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ok"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4698c896-8388-5f7a-a76c-642fc2bc0f4e",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f5185af6-ec59-5c79-b5cb-9027b537ab62",
+                    "leftValue": "={{ $json.next }}",
+                    "rightValue": "fail",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fail"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1f480366-f512-5a4d-a378-70ef2cf1c26d",
+      "name": "Route Docs Trigger",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4800,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": "={{ $json.waitSeconds }}",
+        "unit": "seconds"
+      },
+      "id": "ebab14b4-0bbd-5318-b150-5b386c7eaf33",
+      "name": "Wait Trigger Retry",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5040,
+        20
+      ],
+      "webhookId": "ebab14b4-0bbd-5318-b150-5b386c7eaf33"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst s = j.state;\nreturn [{ json: { state: s, req: { error_code: j.code || 'WORKFLOW_FAILED', stage: j.stage || 'workflow', workflow: 'raven_repository_analysis', execution_id: s.execId, idempotency_key: s.execId + ':fail:' + (j.stage || 'x') } } }];"
+      },
+      "id": "fef7b452-aaea-5a01-a165-ccfe2caa339f",
+      "name": "Prepare Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.RAVEN_API_BASE_URL + '/internal/v1/analysis-jobs/' + $json.state.analysis_id + '/fail' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Internal-Secret",
+              "value": "={{ $env.INTERNAL_SERVICE_SECRET }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.req) }}"
+      },
+      "id": "64d9d16d-3cad-59e7-a3e3-ec6dc15b5d2b",
+      "name": "Report Failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3360,
+        700
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {},
+      "id": "9f045e47-2a91-54c2-bf1f-d25de98d6fb6",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        5280,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "078dec59-4ab0-5ea4-9bfe-398fb571b872",
+      "name": "Stopped",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        3360,
+        460
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Init",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init": {
+      "main": [
+        [
+          {
+            "node": "Authorized?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authorized?": {
+      "main": [
+        [
+          {
+            "node": "Respond Accepted",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Unauthorized",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Eval Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Route Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Dispatch": {
+      "main": [
+        [
+          {
+            "node": "Wait Before Poll",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Dispatch Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stopped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Dispatch Retry": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before Poll": {
+      "main": [
+        [
+          {
+            "node": "Prepare Poll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Poll": {
+      "main": [
+        [
+          {
+            "node": "Poll Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll Status": {
+      "main": [
+        [
+          {
+            "node": "Eval Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Status": {
+      "main": [
+        [
+          {
+            "node": "Route Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Status": {
+      "main": [
+        [
+          {
+            "node": "Wait Before Poll",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Backoff",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Stage Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stopped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Backoff": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Stage Result": {
+      "main": [
+        [
+          {
+            "node": "Stage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stage Result": {
+      "main": [
+        [
+          {
+            "node": "Eval Stage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Stage Result": {
+      "main": [
+        [
+          {
+            "node": "Route Stage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Stage Result": {
+      "main": [
+        [
+          {
+            "node": "Prepare Docs Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Stage Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stopped",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Stage Retry": {
+      "main": [
+        [
+          {
+            "node": "Prepare Stage Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Docs Trigger": {
+      "main": [
+        [
+          {
+            "node": "Trigger Docs Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Docs Workflow": {
+      "main": [
+        [
+          {
+            "node": "Eval Docs Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eval Docs Trigger": {
+      "main": [
+        [
+          {
+            "node": "Route Docs Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Docs Trigger": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Trigger Retry",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Trigger Retry": {
+      "main": [
+        [
+          {
+            "node": "Prepare Docs Trigger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Failure": {
+      "main": [
+        [
+          {
+            "node": "Report Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report Failure": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "raven"
+  },
+  "tags": [],
+  "versionId": "d43d747d-bbc5-5dce-8a39-94e9a86a3228"
+}

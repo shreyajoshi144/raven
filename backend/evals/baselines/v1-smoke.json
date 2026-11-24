@@ -1,0 +1,270 @@
+{
+ "schema_version": 1,
+ "created_from_run": "ab282dbf401f",
+ "started_at": "2026-10-26T17:29:31Z",
+ "benchmark": {
+  "name": "raven-eval",
+  "version": "1.0.0",
+  "fingerprint": "774e9bbd2a2b9fb549de0398a60edc6e35bcc8b98cfb43c559e5e75503aadbdb",
+  "repos": [
+   "shop_api",
+   "clean_service",
+   "fastapi_template"
+  ]
+ },
+ "config": {
+  "suite": "smoke",
+  "repos": [
+   "shop_api",
+   "clean_service",
+   "fastapi_template"
+  ],
+  "sut": "retrieval_only",
+  "repeats": 3,
+  "judge": {
+   "provider": "none",
+   "model": null,
+   "timeout_s": 120.0,
+   "max_retries": 2,
+   "per_minute": 20.0,
+   "threshold": 0.5
+  }
+ },
+ "sut": {
+  "mode": "retrieval_only",
+  "model": null,
+  "answer_generation": "Raven retrieval-only fallback (no LLM)"
+ },
+ "environment": {
+  "python": "3.12.15",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "raven_analyzer_version": "1.1.0",
+  "git_commit": "cd35b88f6186f3388faaea930874fc251254d182",
+  "deepeval": null
+ },
+ "metrics": {
+  "graph": {
+   "routes": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 30,
+    "parts": 3
+   },
+   "data_models": {
+    "tp": 25,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 25,
+    "parts": 3
+   },
+   "orm_models": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.5,
+    "f1": 0.6667,
+    "n_gold": 4,
+    "parts": 3
+   },
+   "internal_imports": {
+    "tp": 90,
+    "fp": 0,
+    "fn": 10,
+    "precision": 1.0,
+    "recall": 0.9,
+    "f1": 0.9474,
+    "n_gold": 100,
+    "parts": 3
+   },
+   "entry_points": {
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": 1.0,
+    "f1": null,
+    "n_gold": 3,
+    "parts": 3
+   }
+  },
+  "readiness": {
+   "rule_level": {
+    "tp": 15,
+    "fp": 2,
+    "fn": 2,
+    "precision": 0.8824,
+    "recall": 0.8824,
+    "f1": 0.8824,
+    "n_gold": 17,
+    "parts": 3,
+    "false_positive_rate": 0.0377
+   },
+   "location_level": {
+    "tp": 12,
+    "fp": 2,
+    "fn": 6,
+    "precision": 0.8571,
+    "recall": 0.6667,
+    "f1": 0.75
+   }
+  },
+  "impact": {
+   "affected_modules": {
+    "tp": 25,
+    "fp": 0,
+    "fn": 2,
+    "precision": 1.0,
+    "recall": 0.9259,
+    "f1": 0.9615,
+    "n_gold": 27,
+    "parts": 5
+   },
+   "routes": {
+    "tp": 33,
+    "fp": 0,
+    "fn": 5,
+    "precision": 1.0,
+    "recall": 0.8684,
+    "f1": 0.9296,
+    "n_gold": 38,
+    "parts": 5
+   },
+   "relevant_tests": {
+    "tp": 10,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 10,
+    "parts": 5
+   },
+   "n_cases": 5
+  },
+  "retrieval": {
+   "span_recall": 0.55,
+   "mrr": 0.3075,
+   "hit@1": 0.2,
+   "hit@3": 0.3,
+   "hit@5": 0.45,
+   "hit@all": 0.6,
+   "snippet_precision": 0.1152,
+   "unanswerable_empty_retrieval_rate": 0.4286,
+   "n_answerable": 20,
+   "n_unanswerable": 7
+  },
+  "qa": {
+   "structured_output_valid_rate": 1.0,
+   "citation_validity": 1.0,
+   "citation_support_precision": 0.1319,
+   "citation_recall": 0.4634,
+   "key_fact_recall_ai": null,
+   "deterministic_accuracy_ai": null,
+   "abstention_recall_ai": null,
+   "false_abstention_rate_ai": null,
+   "n": 27,
+   "n_answerable": 20,
+   "n_with_citations": 24,
+   "n_ai": 0,
+   "n_retrieval_only": 27,
+   "llm_error_codes": [
+    "LLM_NOT_CONFIGURED"
+   ]
+  },
+  "judge": {},
+  "operational": {
+   "pipeline_s": {
+    "n": 9,
+    "mean": 0.2292,
+    "p50": 0.1349,
+    "p95": 0.6756,
+    "max": 0.6756
+   },
+   "retrieve_s": {
+    "n": 81,
+    "mean": 0.0255,
+    "p50": 0.0205,
+    "p95": 0.0503,
+    "max": 0.1876
+   },
+   "answer_s": {
+    "n": 81,
+    "mean": 0.005,
+    "p50": 0.0037,
+    "p95": 0.012,
+    "max": 0.0215
+   },
+   "impact_s": {
+    "n": 15,
+    "mean": 0.0061,
+    "p50": 0.0046,
+    "p95": 0.0118,
+    "max": 0.0131
+   },
+   "sut_llm": {
+    "calls": 0,
+    "errors": 0,
+    "error_codes": [],
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_s": {
+     "n": 0,
+     "mean": null,
+     "p50": null,
+     "p95": null,
+     "max": null
+    },
+    "estimated_cost_usd": 0.0,
+    "cost_basis": "no tokens used"
+   }
+  },
+  "reproducibility": {
+   "repeats_compared": 3,
+   "deterministic_outputs_identical": false,
+   "unstable_outputs": [
+    "fastapi_template:retrieval:ft-q1",
+    "fastapi_template:retrieval:ft-q4",
+    "fastapi_template:retrieval:ft-q6",
+    "fastapi_template:retrieval:ft-q9",
+    "shop_api:retrieval:shop-q7"
+   ],
+   "qa": {
+    "questions": 27,
+    "identical_answer_text_rate": 0.9259,
+    "identical_citation_set_rate": 0.9259,
+    "consistent_abstention_rate": 1.0
+   },
+   "retrieval_per_repeat": [
+    {
+     "repeat": 0,
+     "span_recall": 0.55,
+     "mrr": 0.3075,
+     "hit@5": 0.45,
+     "snippet_precision": 0.1152
+    },
+    {
+     "repeat": 1,
+     "span_recall": 0.575,
+     "mrr": 0.3075,
+     "hit@5": 0.45,
+     "snippet_precision": 0.1208
+    },
+    {
+     "repeat": 2,
+     "span_recall": 0.575,
+     "mrr": 0.3075,
+     "hit@5": 0.45,
+     "snippet_precision": 0.1208
+    }
+   ]
+  }
+ }
+}

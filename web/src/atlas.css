@@ -1,0 +1,21 @@
+/* Atlas engine (frontend/js/flow.js) SVG rules, carried over from the legacy stylesheet and re-themed. */
+/* flow svg internals */
+.flow .col-label { font: 700 15px var(--mono); letter-spacing: .1em; text-transform: uppercase; fill: var(--muted); } .flow .col-rule { stroke: var(--line); stroke-dasharray: 2 6; }
+.flow .fnode { cursor: pointer; outline: none; } .flow .fnode .card { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; } .flow .fnode .shadow { fill: var(--ink); opacity: .9; }
+.flow .fnode .ttl { font: 650 13px var(--sans); fill: var(--ink); letter-spacing: -.01em; } .flow .fnode .sub { font: 500 10.5px var(--mono); fill: var(--muted); } .flow .fnode .chip { fill: var(--panel); stroke: var(--line-2); } .flow .fnode .chip-t { font: 600 9.5px var(--mono); fill: var(--ink-2); }
+.flow .fnode .glyph { stroke: var(--ink); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.flow .fnode:hover .card, .flow .fnode:focus-visible .card { stroke-width: 2.4; } .flow .fnode.sel .card { stroke: var(--green); stroke-width: 3; } .flow .fnode.sel .shadow { fill: var(--lime); opacity: 1; }
+.flow .fnode.ctx .card { stroke-dasharray: 4 3; stroke: var(--muted); } .flow .fnode.ext .card { stroke-dasharray: 5 4; stroke: var(--muted); fill: var(--panel); } .flow .fnode.unres .card { stroke: var(--ink); stroke-dasharray: 2 3; }
+.flow .fnode.dim, .flow .edge-g.dim { opacity: .14; } .flow .fnode.match .card { stroke: var(--green); stroke-width: 3; }
+.flow .edge { fill: none; stroke: var(--ink); stroke-width: 1.4; opacity: .5; } .flow .edge.inferred { stroke-dasharray: 6 5; opacity: .6; } .flow .edge.unresolved { stroke: var(--yellow); stroke-width: 2.4; stroke-dasharray: 1 6; opacity: .95; }
+.flow .edge-hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; } .flow .edge-g:hover .edge, .flow .edge-g.hl .edge { opacity: 1; stroke: var(--green); stroke-width: 2.4; }
+.flow .edge-flow { fill: none; stroke: var(--lime); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 22; opacity: 0; } .flow .edge-g.hl .edge-flow, .flow .edge-g:hover .edge-flow { opacity: 1; animation: packets 1.1s linear infinite; } @keyframes packets { to { stroke-dashoffset: -23; } }
+.flow .edge-label { font: 600 10px var(--mono); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; opacity: 0; pointer-events: none; } .flow .edge-g:hover .edge-label, .flow .edge-g.hl .edge-label { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .flow .edge-g.hl .edge-flow, .pline.active::after, .badge.live .dot, .mini-pipe i.active { animation: none; } svg.flow .vp.anim { transition: none; } }
+.flow .fnode .card { fill: var(--surface); stroke: var(--line-2); } .flow .fnode .shadow { fill: var(--accent); opacity: .16; } .flow .fnode.sel .shadow { fill: var(--accent); opacity: .5; }
+.flow .fnode.ext .card { fill: var(--surface-2); } .flow .fnode .ttl { fill: var(--text); } .flow .fnode .chip { fill: var(--surface-2); stroke: var(--line-2); }
+.flow .fnode .glyph { stroke: var(--text-2); } .flow .edge { stroke: var(--text-2); } .flow .edge-label { stroke: var(--bg); fill: var(--text); } .flow .col-label { fill: var(--muted); }
+.flow .fnode:hover .card, .flow .fnode:focus-visible .card { stroke: var(--text); } .flow .fnode.sel .card, .flow .fnode.match .card { stroke: var(--accent); }
+.flow .edge-g:hover .edge, .flow .edge-g.hl .edge { stroke: var(--accent); } .flow .edge-flow { stroke: var(--accent); }
+.minimap { background: var(--surface); border: 1px solid var(--line-2); border-radius: 8px; position: absolute; left: 12px; bottom: 12px; width: 190px; height: 124px; z-index: 3; cursor: pointer; }
+svg.flow { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: none; user-select: none; } svg.flow.panning { cursor: grabbing; } svg.flow .vp.anim { transition: transform .45s cubic-bezier(.2,.8,.2,1); }

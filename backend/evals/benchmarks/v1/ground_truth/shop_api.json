@@ -1,0 +1,666 @@
+{
+ "repo": "shop_api",
+ "verification": {
+  "method": "manual",
+  "by": "Raven maintainers (authored with Claude Code, reading the source at the pinned revision)",
+  "date": "2026-10-26",
+  "independent_review": false,
+  "anchors": "every evidence span carries an anchor substring that `python -m evals validate` checks against the source"
+ },
+ "graph": {
+  "routes": {
+   "exhaustive": true,
+   "items": [
+    {
+     "method": "GET",
+     "path": "/health",
+     "handler_file": "app/main.py",
+     "decorator_line": 13,
+     "def_line": 14
+    },
+    {
+     "method": "GET",
+     "path": "/api/products/",
+     "handler_file": "app/api/products.py",
+     "decorator_line": 9,
+     "def_line": 10
+    },
+    {
+     "method": "POST",
+     "path": "/api/products/import",
+     "handler_file": "app/api/products.py",
+     "decorator_line": 14,
+     "def_line": 15
+    },
+    {
+     "method": "GET",
+     "path": "/api/orders/{order_id}",
+     "handler_file": "app/api/orders.py",
+     "decorator_line": 11,
+     "def_line": 12
+    },
+    {
+     "method": "POST",
+     "path": "/api/orders/",
+     "handler_file": "app/api/orders.py",
+     "decorator_line": 16,
+     "def_line": 17
+    }
+   ]
+  },
+  "data_models": {
+   "exhaustive": true,
+   "items": [
+    {
+     "name": "Product",
+     "path": "app/models.py",
+     "line": 9
+    },
+    {
+     "name": "Order",
+     "path": "app/models.py",
+     "line": 16
+    },
+    {
+     "name": "ProductOut",
+     "path": "app/models.py",
+     "line": 23
+    },
+    {
+     "name": "OrderIn",
+     "path": "app/models.py",
+     "line": 29
+    }
+   ]
+  },
+  "orm_models": {
+   "exhaustive": true,
+   "items": [
+    {
+     "name": "Product",
+     "path": "app/models.py",
+     "line": 9
+    },
+    {
+     "name": "Order",
+     "path": "app/models.py",
+     "line": 16
+    }
+   ]
+  },
+  "internal_imports": {
+   "exhaustive": true,
+   "items": [
+    [
+     "app/main.py",
+     "app/api/router.py"
+    ],
+    [
+     "app/main.py",
+     "app/core/config.py"
+    ],
+    [
+     "app/core/security.py",
+     "app/core/config.py"
+    ],
+    [
+     "app/db.py",
+     "app/core/config.py"
+    ],
+    [
+     "app/api/deps.py",
+     "app/core/security.py"
+    ],
+    [
+     "app/api/router.py",
+     "app/api/orders.py"
+    ],
+    [
+     "app/api/router.py",
+     "app/api/products.py"
+    ],
+    [
+     "app/api/products.py",
+     "app/db.py"
+    ],
+    [
+     "app/api/products.py",
+     "app/models.py"
+    ],
+    [
+     "app/api/orders.py",
+     "app/db.py"
+    ],
+    [
+     "app/api/orders.py",
+     "app/api/deps.py"
+    ],
+    [
+     "app/api/orders.py",
+     "app/models.py"
+    ],
+    [
+     "app/api/orders.py",
+     "app/services/billing.py"
+    ],
+    [
+     "app/services/billing.py",
+     "app/core/config.py"
+    ],
+    [
+     "tests/test_products.py",
+     "app/api/products.py"
+    ],
+    [
+     "tests/test_security.py",
+     "app/core/security.py"
+    ]
+   ]
+  },
+  "entry_points": {
+   "exhaustive": false,
+   "items": [
+    "app/main.py"
+   ]
+  }
+ },
+ "qa": [
+  {
+   "id": "shop-q1",
+   "category": "security",
+   "question": "How are user passwords hashed?",
+   "answerable": true,
+   "expected_answer": "hash_password in app/core/security.py computes hashlib.md5 over salt + password and returns the hex digest.",
+   "key_facts": [
+    [
+     "md5"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/core/security.py",
+     "start_line": 9,
+     "end_line": 10,
+     "anchor": "hashlib.md5"
+    }
+   ]
+  },
+  {
+   "id": "shop-q2",
+   "category": "auth",
+   "question": "Which API endpoints require an authenticated user?",
+   "answerable": true,
+   "expected_answer": "The orders endpoints GET /api/orders/{order_id} and POST /api/orders/ depend on get_current_user (app/api/deps.py), which validates the bearer token.",
+   "key_facts": [
+    [
+     "orders"
+    ],
+    [
+     "get_current_user"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/api/orders.py",
+     "start_line": 11,
+     "end_line": 12,
+     "anchor": "Depends(get_current_user)"
+    },
+    {
+     "path": "app/api/orders.py",
+     "start_line": 16,
+     "end_line": 17,
+     "anchor": "Depends(get_current_user)"
+    },
+    {
+     "path": "app/api/deps.py",
+     "start_line": 7,
+     "end_line": 11,
+     "anchor": "def get_current_user"
+    }
+   ]
+  },
+  {
+   "id": "shop-q3",
+   "category": "error_handling",
+   "question": "What happens when a payment charge fails?",
+   "answerable": true,
+   "expected_answer": "charge() calls resp.raise_for_status(); on any exception it logs 'charge failed' with log.exception and re-raises the exception.",
+   "key_facts": [
+    [
+     "log"
+    ],
+    [
+     "raise"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/services/billing.py",
+     "start_line": 19,
+     "end_line": 23,
+     "anchor": "log.exception"
+    }
+   ]
+  },
+  {
+   "id": "shop-q4",
+   "category": "data_access",
+   "question": "Where is the SQL query for product search built?",
+   "answerable": true,
+   "expected_answer": "find_products in app/db.py builds the query with an f-string that interpolates the search term into a LIKE clause.",
+   "key_facts": [
+    [
+     "find_products"
+    ],
+    [
+     "LIKE",
+     "f-string",
+     "interpolat",
+     "format"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/db.py",
+     "start_line": 11,
+     "end_line": 14,
+     "anchor": "LIKE"
+    }
+   ]
+  },
+  {
+   "id": "shop-q5",
+   "category": "configuration",
+   "question": "How long are access tokens valid?",
+   "answerable": true,
+   "expected_answer": "30 minutes: Settings.token_ttl_minutes = 30 in app/core/config.py, used by make_token to compute the expiry.",
+   "key_facts": [
+    [
+     "30"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/core/config.py",
+     "start_line": 11,
+     "end_line": 11,
+     "anchor": "token_ttl_minutes = 30"
+    },
+    {
+     "path": "app/core/security.py",
+     "start_line": 14,
+     "end_line": 14,
+     "anchor": "token_ttl_minutes"
+    }
+   ]
+  },
+  {
+   "id": "shop-q6",
+   "category": "configuration",
+   "question": "Which environment variables does the application read?",
+   "answerable": true,
+   "expected_answer": "DATABASE_URL (required at import), JWT_SECRET (with a hard-coded default) and PAYMENT_API_KEY, all in app/core/config.py.",
+   "key_facts": [
+    [
+     "DATABASE_URL"
+    ],
+    [
+     "JWT_SECRET"
+    ],
+    [
+     "PAYMENT_API_KEY"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/core/config.py",
+     "start_line": 4,
+     "end_line": 6,
+     "anchor": "os.environ"
+    }
+   ]
+  },
+  {
+   "id": "shop-q7",
+   "category": "routing",
+   "question": "What URL prefix do the product routes use?",
+   "answerable": true,
+   "expected_answer": "/api/products: router.py mounts products.router at /products and main.py mounts api_router at /api.",
+   "key_facts": [
+    [
+     "/products"
+    ],
+    [
+     "/api"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/api/router.py",
+     "start_line": 6,
+     "end_line": 6,
+     "anchor": "prefix=\"/products\""
+    },
+    {
+     "path": "app/main.py",
+     "start_line": 10,
+     "end_line": 10,
+     "anchor": "prefix=\"/api\""
+    }
+   ]
+  },
+  {
+   "id": "shop-q8",
+   "category": "integrations",
+   "question": "Which external payment endpoint is called to charge a customer?",
+   "answerable": true,
+   "expected_answer": "POST https://payments.example.com/v1/charges via requests.post in app/services/billing.py.",
+   "key_facts": [
+    [
+     "payments.example.com"
+    ]
+   ],
+   "evidence": [
+    {
+     "path": "app/services/billing.py",
+     "start_line": 12,
+     "end_line": 13,
+     "anchor": "payments.example.com"
+    }
+   ]
+  },
+  {
+   "id": "shop-u1",
+   "category": "unanswerable",
+   "question": "How does the service send order confirmation emails?",
+   "answerable": false,
+   "expected_answer": "The repository contains no email sending code.",
+   "key_facts": [],
+   "evidence": []
+  },
+  {
+   "id": "shop-u2",
+   "category": "unanswerable",
+   "question": "Which Redis keys does the cache layer use?",
+   "answerable": false,
+   "expected_answer": "There is no Redis or cache layer in the repository.",
+   "key_facts": [],
+   "evidence": []
+  },
+  {
+   "id": "shop-u3",
+   "category": "unanswerable",
+   "question": "Where is the Kubernetes deployment manifest?",
+   "answerable": false,
+   "expected_answer": "The repository has no Kubernetes manifests.",
+   "key_facts": [],
+   "evidence": []
+  }
+ ],
+ "readiness": {
+  "assessed_rules": [
+   "SEC-CORS-WILDCARD",
+   "SEC-WEAK-HASH",
+   "SEC-SQL-STRING-BUILD",
+   "SEC-SHELL-EXEC",
+   "SEC-TLS-VERIFY-DISABLED",
+   "SEC-YAML-LOAD",
+   "SEC-DYNAMIC-EXEC",
+   "SEC-UNSAFE-DESERIALIZE",
+   "SEC-JWT-VERIFY-DISABLED",
+   "SEC-DEBUG-MODE",
+   "SEC-HARDCODED-SECRET-DEFAULT",
+   "SEC-NO-AUTH-DETECTED",
+   "SEC-UNAUTH-MUTATION",
+   "EH-BARE-EXCEPT",
+   "EH-SWALLOWED-BROAD",
+   "EH-NO-GLOBAL-HANDLER",
+   "LOG-PRINT",
+   "LOG-NONE",
+   "TEST-NONE",
+   "MAINT-IMPORT-CYCLE",
+   "CFG-REQUIRED-ENV-AT-IMPORT",
+   "CFG-UNDOCUMENTED-ENV",
+   "CFG-NO-ENV-TEMPLATE",
+   "TEST-UNREACHED-ROUTER",
+   "TEST-UNREACHED-OTHER"
+  ],
+  "expected": [
+   {
+    "rule": "SEC-CORS-WILDCARD",
+    "evidence": [
+     {
+      "path": "app/main.py",
+      "start_line": 9,
+      "end_line": 9,
+      "anchor": "allow_origins=[\"*\"]"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-WEAK-HASH",
+    "evidence": [
+     {
+      "path": "app/core/security.py",
+      "start_line": 10,
+      "end_line": 10,
+      "anchor": "hashlib.md5"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-SQL-STRING-BUILD",
+    "evidence": [
+     {
+      "path": "app/db.py",
+      "start_line": 13,
+      "end_line": 13,
+      "anchor": "LIKE"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-SHELL-EXEC",
+    "evidence": [
+     {
+      "path": "app/api/products.py",
+      "start_line": 17,
+      "end_line": 17,
+      "anchor": "shell=True"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-TLS-VERIFY-DISABLED",
+    "evidence": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 12,
+      "end_line": 18,
+      "anchor": "verify=False"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-HARDCODED-SECRET-DEFAULT",
+    "evidence": [
+     {
+      "path": "app/core/config.py",
+      "start_line": 5,
+      "end_line": 5,
+      "anchor": "JWT_SECRET"
+     }
+    ]
+   },
+   {
+    "rule": "SEC-UNAUTH-MUTATION",
+    "evidence": [
+     {
+      "path": "app/api/products.py",
+      "start_line": 14,
+      "end_line": 15,
+      "anchor": "@router.post(\"/import\")"
+     }
+    ]
+   },
+   {
+    "rule": "EH-BARE-EXCEPT",
+    "evidence": [
+     {
+      "path": "app/core/security.py",
+      "start_line": 23,
+      "end_line": 24,
+      "anchor": "except:"
+     }
+    ]
+   },
+   {
+    "rule": "EH-SWALLOWED-BROAD",
+    "evidence": [
+     {
+      "path": "app/db.py",
+      "start_line": 25,
+      "end_line": 26,
+      "anchor": "except Exception:"
+     }
+    ]
+   },
+   {
+    "rule": "EH-NO-GLOBAL-HANDLER",
+    "evidence": []
+   },
+   {
+    "rule": "LOG-PRINT",
+    "evidence": [
+     {
+      "path": "app/api/orders.py",
+      "start_line": 19,
+      "end_line": 19,
+      "anchor": "print("
+     }
+    ]
+   },
+   {
+    "rule": "CFG-REQUIRED-ENV-AT-IMPORT",
+    "evidence": [
+     {
+      "path": "app/core/config.py",
+      "start_line": 4,
+      "end_line": 4,
+      "anchor": "os.environ[\"DATABASE_URL\"]"
+     }
+    ]
+   },
+   {
+    "rule": "CFG-UNDOCUMENTED-ENV",
+    "evidence": [
+     {
+      "path": "app/core/config.py",
+      "start_line": 6,
+      "end_line": 6,
+      "anchor": "PAYMENT_API_KEY"
+     }
+    ]
+   },
+   {
+    "rule": "TEST-UNREACHED-OTHER",
+    "evidence": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 1,
+      "end_line": 1,
+      "anchor": "Payment provider client"
+     }
+    ]
+   }
+  ],
+  "notes": "Labels follow the rule definitions in docs/evaluation/AI_EVALUATION.md (labelling guide). The bare except at security.py:23 returns None, so it is not 'swallowed' (body is not pass/continue). TEST-UNREACHED-* apply to modules longer than 20 lines: app/api/orders.py has exactly 20 lines, so it is not expected (Raven counts the empty string after the final newline as line 21). CFG-REQUIRED-ENV-AT-IMPORT applies only to os.environ[...] lookups that raise when the variable is missing, not os.getenv()."
+ },
+ "impact": [
+  {
+   "id": "shop-i1",
+   "description": "Change the configuration module",
+   "changed": [
+    {
+     "path": "app/core/config.py",
+     "status": "modified",
+     "additions": 1,
+     "deletions": 1
+    }
+   ],
+   "expected": {
+    "affected_modules": {
+     "exhaustive": true,
+     "semantics": "non-test modules that import a changed file directly or transitively (unbounded depth), derived from graph.internal_imports",
+     "items": [
+      "app/api/deps.py",
+      "app/api/orders.py",
+      "app/api/products.py",
+      "app/api/router.py",
+      "app/core/security.py",
+      "app/db.py",
+      "app/main.py",
+      "app/services/billing.py"
+     ]
+    },
+    "routes": {
+     "exhaustive": true,
+     "semantics": "routes whose handler file is changed or in the affected set (file-level, the granularity Raven claims)",
+     "items": [
+      "GET /api/orders/{order_id}",
+      "GET /api/products/",
+      "GET /health",
+      "POST /api/orders/",
+      "POST /api/products/import"
+     ]
+    },
+    "relevant_tests": {
+     "exhaustive": true,
+     "semantics": "test files whose tests import changed/affected code or call affected routes (manual judgement)",
+     "items": [
+      "tests/test_products.py",
+      "tests/test_security.py"
+     ]
+    }
+   }
+  },
+  {
+   "id": "shop-i2",
+   "description": "Change the billing service",
+   "changed": [
+    {
+     "path": "app/services/billing.py",
+     "status": "modified",
+     "additions": 3,
+     "deletions": 0
+    }
+   ],
+   "expected": {
+    "affected_modules": {
+     "exhaustive": true,
+     "semantics": "non-test modules that import a changed file directly or transitively (unbounded depth), derived from graph.internal_imports",
+     "items": [
+      "app/api/orders.py",
+      "app/api/router.py",
+      "app/main.py"
+     ]
+    },
+    "routes": {
+     "exhaustive": true,
+     "semantics": "routes whose handler file is changed or in the affected set (file-level, the granularity Raven claims)",
+     "items": [
+      "GET /api/orders/{order_id}",
+      "GET /health",
+      "POST /api/orders/"
+     ]
+    },
+    "relevant_tests": {
+     "exhaustive": true,
+     "semantics": "no test exercises billing (manual judgement)",
+     "items": []
+    }
+   }
+  }
+ ]
+}

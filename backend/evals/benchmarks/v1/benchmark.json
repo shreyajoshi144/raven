@@ -1,0 +1,46 @@
+{
+ "name": "raven-eval",
+ "version": "1.0.0",
+ "created": "2026-10-26",
+ "description": "Versioned benchmark for Raven: graph accuracy, readiness findings, change impact, retrieval and grounded Q&A, with hand-labelled ground truth. Bump the version whenever a label or a source file changes.",
+ "repos": [
+  {
+   "id": "shop_api",
+   "kind": "hermetic",
+   "full_name": "raven-eval/shop_api",
+   "source_dir": "repos/shop_api",
+   "ground_truth": "ground_truth/shop_api.json",
+   "description": "Synthetic FastAPI shop service written for this benchmark: nested router prefixes, SQLAlchemy + pydantic models, auth dependency, and one deliberate instance of each labelled readiness pattern.",
+   "content_sha256": "1b3ca7fe81b5f64909c522086b769e6a155ae528afac1ce4b52c5cc594124720"
+  },
+  {
+   "id": "clean_service",
+   "kind": "hermetic",
+   "full_name": "raven-eval/clean_service",
+   "source_dir": "repos/clean_service",
+   "ground_truth": "ground_truth/clean_service.json",
+   "description": "Synthetic, deliberately well-behaved FastAPI service: false-positive checks for readiness rules and abstention.",
+   "content_sha256": "83ef4589b0e21675ca0de187387ac05aaea3624e598c4926460ad3080792d5b1"
+  },
+  {
+   "id": "fastapi_template",
+   "kind": "real",
+   "full_name": "fastapi/full-stack-fastapi-template",
+   "source_dir": "repos/fastapi_template",
+   "ground_truth": "ground_truth/fastapi_template.json",
+   "description": "Real public repository (backend/ subset, vendored byte-identical, MIT): 23 routes behind a dynamic prefix, SQLModel tables, JWT auth in a file that uses Python 3.14-only syntax.",
+   "upstream": {
+    "url": "https://github.com/fastapi/full-stack-fastapi-template",
+    "commit": "b1125d8839482cb7bbae603ddc6d0081bf87532e",
+    "subset": "backend/",
+    "license": "MIT"
+   },
+   "content_sha256": "054330320c24546cca1d6697634c1fde9191f5d80febf14d57bf8fe04fc6f7ed"
+  }
+ ],
+ "smoke_repos": [
+  "shop_api",
+  "clean_service",
+  "fastapi_template"
+ ]
+}

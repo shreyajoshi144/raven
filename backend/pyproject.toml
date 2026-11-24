@@ -1,0 +1,15 @@
+[tool.ruff]
+line-length = 160
+target-version = "py312"
+extend-exclude = ["migrations/versions", "evals/benchmarks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "S102", "S307", "S608"]
+ignore = ["E501", "B008", "UP037", "UP040", "B904", "B905", "UP017", "E701", "E702", "E731", "UP035"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011", "B017", "E741", "F841"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::pytest.PytestUnraisableExceptionWarning"]

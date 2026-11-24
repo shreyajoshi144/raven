@@ -1,0 +1,115 @@
+{
+ "_comment": "Regression floors for the hermetic smoke suite (retrieval-only SUT, no LLM). Floors equal values observed for benchmark v1 (rounded down to two decimals): set 2026-10-26, raised 2026-10-27 after the four defect fixes and 2026-11-01 after the SEC-UNAUTH-MUTATION auth-recognition fix. Floors are only ever raised. They stop Raven getting worse; they are NOT quality targets. Retrieval is deterministic, so its floors equal the observed values.",
+ "checks": [
+  {
+   "metric": "graph.routes.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "graph.routes.recall",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "graph.data_models.f1",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "graph.orm_models.recall",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "graph.internal_imports.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "graph.internal_imports.recall",
+   "min": 0.99,
+   "required": true
+  },
+  {
+   "metric": "readiness.rule_level.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "readiness.rule_level.recall",
+   "min": 0.94,
+   "required": true
+  },
+  {
+   "metric": "readiness.rule_level.false_positive_rate",
+   "max": 0.0,
+   "required": true
+  },
+  {
+   "metric": "readiness.location_level.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "readiness.location_level.recall",
+   "min": 0.94,
+   "required": true
+  },
+  {
+   "metric": "impact.affected_modules.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "impact.affected_modules.recall",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "impact.routes.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "impact.routes.recall",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "impact.relevant_tests.precision",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "impact.relevant_tests.recall",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "retrieval.span_recall",
+   "min": 0.6,
+   "required": true
+  },
+  {
+   "metric": "retrieval.mrr",
+   "min": 0.36,
+   "required": true
+  },
+  {
+   "metric": "retrieval.hit@5",
+   "min": 0.55,
+   "required": true
+  },
+  {
+   "metric": "qa.structured_output_valid_rate",
+   "min": 1.0,
+   "required": true
+  },
+  {
+   "metric": "qa.citation_validity",
+   "min": 1.0,
+   "required": true
+  }
+ ]
+}

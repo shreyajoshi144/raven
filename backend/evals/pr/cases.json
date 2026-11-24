@@ -1,0 +1,29 @@
+{
+  "name": "raven-pr-v1",
+  "description": "Labelled pull-request scenarios. 'real' cases apply a small, hand-written mutation to the vendored fastapi/full-stack-fastapi-template backend (see benchmarks/v1/repos/fastapi_template/PROVENANCE.md); 'inline' cases use a tiny synthetic repository. Expected kinds were decided from the mutation itself, not from Raven's output.",
+  "inline_repo": {
+    "app/__init__.py": "", "app/api/__init__.py": "", "app/services/__init__.py": "", "app/models/__init__.py": "",
+    "app/api/items.py": "from app.services.pricing import price\n\n\ndef list_items():\n    return price(1, 'x')\n",
+    "app/services/pricing.py": "import json\nfrom app.models.item import Item\n\n\ndef price(qty, currency):\n    return Item(qty)\n\n\ndef discount(x):\n    return x\n",
+    "app/models/item.py": "class Item:\n    def __init__(self, qty):\n        self.qty = qty\n",
+    "tests/test_pricing.py": "from app.services.pricing import price\n\n\ndef test_price():\n    assert price(1, 'x')\n"
+  },
+  "cases": [
+    {"id": "real-new-dependency", "base": "real", "ops": [{"file": "backend/app/crud.py", "prepend": "import requests\n"}],
+     "expect": ["new_dependency"], "forbid": ["new_cycle", "breaking_signature_changed", "breaking_symbol_removed", "boundary_violation"]},
+    {"id": "real-signature-change", "base": "real", "ops": [{"file": "backend/app/crud.py", "replace": ["def create_user(*, session: Session, user_create: UserCreate) -> User:", "def create_user(*, session: Session) -> User:"]}],
+     "expect": ["breaking_signature_changed"], "forbid": ["new_dependency", "new_cycle"]},
+    {"id": "real-new-import-cycle", "base": "real", "ops": [{"file": "backend/app/models.py", "prepend": "from app.crud import create_user\n"}],
+     "expect": ["new_cycle"], "forbid": ["new_dependency", "breaking_signature_changed"]},
+    {"id": "real-untested-new-module", "base": "real", "ops": [{"add": "backend/app/reports.py", "content": "def build_report(rows):\n    return [r for r in rows if r]\n"}],
+     "expect": ["missing_tests"], "forbid": ["new_dependency", "new_cycle", "breaking_signature_changed"]},
+    {"id": "real-comment-only-change", "base": "real", "ops": [{"file": "backend/app/crud.py", "prepend": "# reviewed\n"}],
+     "expect": [], "forbid": ["new_dependency", "new_cycle", "breaking_signature_changed", "breaking_symbol_removed", "boundary_violation", "coupling_increase", "complexity_growth", "new_readiness_finding"]},
+    {"id": "inline-layer-violation-and-removed-function", "base": "inline", "ops": [
+        {"file": "app/models/item.py", "prepend": "from app.api.items import list_items\n"},
+        {"file": "app/services/pricing.py", "replace": ["def discount(x):\n    return x\n", ""]}],
+     "expect": ["boundary_violation", "new_cycle", "breaking_symbol_removed"], "forbid": ["new_dependency", "breaking_signature_changed"]},
+    {"id": "inline-sensitive-area", "base": "inline", "ops": [{"add": "app/services/auth_utils.py", "content": "def check(token):\n    return bool(token)\n"}],
+     "expect": ["sensitive_area_changed", "missing_tests"], "forbid": ["new_cycle", "breaking_signature_changed"]}
+  ]
+}

@@ -1,0 +1,9 @@
+# Evaluation-only dependencies (LLM-as-judge). NEVER install these into the API/worker image or the runtime environment.
+# Use a separate virtualenv:
+#   python3.12 -m venv .venv-eval
+#   .venv-eval/bin/pip install -r backend/requirements-dev.txt
+#   .venv-eval/bin/pip install -r backend/requirements-eval.txt
+# deepeval 4.3.1 requires click<8.4, so pip downgrades click from Raven's runtime pin (8.5.0) inside that virtualenv only.
+# The deterministic evaluation (python -m evals run --suite smoke) does not need anything from this file.
+deepeval==4.3.1
+anthropic==2.3.0

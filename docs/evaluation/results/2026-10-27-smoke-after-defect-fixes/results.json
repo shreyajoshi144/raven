@@ -1,0 +1,4592 @@
+{
+ "schema_version": 1,
+ "harness_version": "1.0.0",
+ "run_id": "ef5411364870",
+ "started_at": "2026-10-27T09:41:20Z",
+ "duration_s": 3.43,
+ "config": {
+  "suite": "smoke",
+  "repos": [
+   "shop_api",
+   "clean_service",
+   "fastapi_template"
+  ],
+  "sut": "retrieval_only",
+  "repeats": 3,
+  "judge": {
+   "provider": "none",
+   "model": null,
+   "timeout_s": 120.0,
+   "max_retries": 2,
+   "per_minute": 20.0,
+   "threshold": 0.5
+  }
+ },
+ "environment": {
+  "python": "3.12.15",
+  "platform": "macOS-15.6.1-arm64-arm-64bit",
+  "raven_analyzer_version": "1.1.0",
+  "git_commit": "cd35b88f6186f3388faaea930874fc251254d182",
+  "git_dirty": true,
+  "deepeval": null
+ },
+ "benchmark": {
+  "name": "raven-eval",
+  "version": "1.0.0",
+  "fingerprint": "774e9bbd2a2b9fb549de0398a60edc6e35bcc8b98cfb43c559e5e75503aadbdb",
+  "repos": [
+   "shop_api",
+   "clean_service",
+   "fastapi_template"
+  ]
+ },
+ "sut": {
+  "mode": "retrieval_only",
+  "model": null,
+  "answer_generation": "Raven retrieval-only fallback (no LLM)"
+ },
+ "judge_status": {
+  "state": "not_requested",
+  "reason": "EVAL_JUDGE_PROVIDER is not set (deterministic metrics only)",
+  "provider": null,
+  "model": null,
+  "deepeval_version": null
+ },
+ "metrics": {
+  "graph": {
+   "routes": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 30,
+    "parts": 3
+   },
+   "data_models": {
+    "tp": 25,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 25,
+    "parts": 3
+   },
+   "orm_models": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 4,
+    "parts": 3
+   },
+   "internal_imports": {
+    "tp": 99,
+    "fp": 0,
+    "fn": 1,
+    "precision": 1.0,
+    "recall": 0.99,
+    "f1": 0.995,
+    "n_gold": 100,
+    "parts": 3
+   },
+   "entry_points": {
+    "tp": 3,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": 1.0,
+    "f1": null,
+    "n_gold": 3,
+    "parts": 3
+   }
+  },
+  "readiness": {
+   "rule_level": {
+    "tp": 16,
+    "fp": 0,
+    "fn": 1,
+    "precision": 1.0,
+    "recall": 0.9412,
+    "f1": 0.9697,
+    "n_gold": 17,
+    "parts": 3,
+    "false_positive_rate": 0.0
+   },
+   "location_level": {
+    "tp": 16,
+    "fp": 8,
+    "fn": 2,
+    "precision": 0.6667,
+    "recall": 0.8889,
+    "f1": 0.7619
+   }
+  },
+  "impact": {
+   "affected_modules": {
+    "tp": 27,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 27,
+    "parts": 5
+   },
+   "routes": {
+    "tp": 38,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 38,
+    "parts": 5
+   },
+   "relevant_tests": {
+    "tp": 10,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "n_gold": 10,
+    "parts": 5
+   },
+   "n_cases": 5
+  },
+  "retrieval": {
+   "span_recall": 0.6083,
+   "mrr": 0.3533,
+   "hit@1": 0.25,
+   "hit@3": 0.35,
+   "hit@5": 0.5,
+   "hit@all": 0.7,
+   "snippet_precision": 0.1243,
+   "unanswerable_empty_retrieval_rate": 0.4286,
+   "n_answerable": 20,
+   "n_unanswerable": 7
+  },
+  "qa": {
+   "structured_output_valid_rate": 1.0,
+   "citation_validity": 1.0,
+   "citation_support_precision": 0.14,
+   "citation_recall": 0.5116,
+   "key_fact_recall_ai": null,
+   "deterministic_accuracy_ai": null,
+   "abstention_recall_ai": null,
+   "false_abstention_rate_ai": null,
+   "n": 27,
+   "n_answerable": 20,
+   "n_with_citations": 24,
+   "n_ai": 0,
+   "n_retrieval_only": 27,
+   "llm_error_codes": [
+    "LLM_NOT_CONFIGURED"
+   ]
+  },
+  "judge": {},
+  "operational": {
+   "pipeline_s": {
+    "n": 9,
+    "mean": 0.1381,
+    "p50": 0.0741,
+    "p95": 0.3053,
+    "max": 0.3053
+   },
+   "retrieve_s": {
+    "n": 81,
+    "mean": 0.0169,
+    "p50": 0.0145,
+    "p95": 0.0338,
+    "max": 0.0392
+   },
+   "answer_s": {
+    "n": 81,
+    "mean": 0.003,
+    "p50": 0.0027,
+    "p95": 0.0048,
+    "max": 0.0204
+   },
+   "impact_s": {
+    "n": 15,
+    "mean": 0.0037,
+    "p50": 0.0028,
+    "p95": 0.0063,
+    "max": 0.0065
+   },
+   "sut_llm": {
+    "calls": 0,
+    "errors": 0,
+    "error_codes": [],
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "latency_s": {
+     "n": 0,
+     "mean": null,
+     "p50": null,
+     "p95": null,
+     "max": null
+    },
+    "estimated_cost_usd": 0.0,
+    "cost_basis": "no tokens used"
+   }
+  },
+  "reproducibility": {
+   "repeats_compared": 3,
+   "deterministic_outputs_identical": true,
+   "unstable_outputs": [],
+   "qa": {
+    "questions": 27,
+    "identical_answer_text_rate": 1.0,
+    "identical_citation_set_rate": 1.0,
+    "consistent_abstention_rate": 1.0
+   },
+   "retrieval_per_repeat": [
+    {
+     "repeat": 0,
+     "span_recall": 0.6083,
+     "mrr": 0.3534,
+     "hit@5": 0.5,
+     "snippet_precision": 0.1243
+    },
+    {
+     "repeat": 1,
+     "span_recall": 0.6083,
+     "mrr": 0.3534,
+     "hit@5": 0.5,
+     "snippet_precision": 0.1243
+    },
+    {
+     "repeat": 2,
+     "span_recall": 0.6083,
+     "mrr": 0.3534,
+     "hit@5": 0.5,
+     "snippet_precision": 0.1243
+    }
+   ]
+  }
+ },
+ "per_repo": {
+  "graph": {
+   "shop_api": {
+    "routes": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 5,
+     "n_gold": 5,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "line_accuracy": 1.0
+    },
+    "data_models": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 4,
+     "n_gold": 4,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "orm_models": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "internal_imports": {
+     "tp": 16,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 16,
+     "n_gold": 16,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "verified_static_share": 1.0
+    },
+    "entry_points": {
+     "tp": 1,
+     "fp": null,
+     "fn": 0,
+     "precision": null,
+     "recall": 1.0,
+     "f1": null,
+     "n_pred": 1,
+     "n_gold": 1,
+     "exhaustive": false,
+     "missing": [],
+     "extra": []
+    },
+    "stage_seconds": {
+     "fetch": 0.02,
+     "graph": 0.05,
+     "parse": 0.03
+    }
+   },
+   "clean_service": {
+    "routes": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "line_accuracy": 1.0
+    },
+    "data_models": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 0,
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "n_pred": 0,
+     "n_gold": 0,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "orm_models": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 0,
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "n_pred": 0,
+     "n_gold": 0,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "internal_imports": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 5,
+     "n_gold": 5,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "verified_static_share": 1.0
+    },
+    "entry_points": {
+     "tp": 1,
+     "fp": null,
+     "fn": 0,
+     "precision": null,
+     "recall": 1.0,
+     "f1": null,
+     "n_pred": 1,
+     "n_gold": 1,
+     "exhaustive": false,
+     "missing": [],
+     "extra": []
+    },
+    "stage_seconds": {
+     "fetch": 0.0,
+     "graph": 0.02,
+     "parse": 0.01
+    }
+   },
+   "fastapi_template": {
+    "routes": {
+     "tp": 23,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 23,
+     "n_gold": 23,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "line_accuracy": 1.0
+    },
+    "data_models": {
+     "tp": 21,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 21,
+     "n_gold": 21,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "orm_models": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "internal_imports": {
+     "tp": 78,
+     "fp": 0,
+     "fn": 1,
+     "precision": 1.0,
+     "recall": 0.9873,
+     "f1": 0.9936,
+     "n_pred": 78,
+     "n_gold": 79,
+     "exhaustive": true,
+     "missing": [
+      "('backend/app/alembic/env.py', 'backend/app/models.py')"
+     ],
+     "extra": [],
+     "verified_static_share": 1.0
+    },
+    "entry_points": {
+     "tp": 1,
+     "fp": null,
+     "fn": 0,
+     "precision": null,
+     "recall": 1.0,
+     "f1": null,
+     "n_pred": 3,
+     "n_gold": 1,
+     "exhaustive": false,
+     "missing": [],
+     "extra": []
+    },
+    "stage_seconds": {
+     "fetch": 0.04,
+     "graph": 0.13,
+     "parse": 0.09
+    }
+   }
+  },
+  "readiness": {
+   "shop_api": {
+    "rule_level": {
+     "tp": 13,
+     "fp": 0,
+     "fn": 1,
+     "precision": 1.0,
+     "recall": 0.9286,
+     "f1": 0.963,
+     "n_pred": 13,
+     "n_gold": 14,
+     "exhaustive": true,
+     "missing": [
+      "SEC-HARDCODED-SECRET-DEFAULT"
+     ],
+     "extra": [],
+     "tn": 11,
+     "assessed": 25
+    },
+    "location_level": {
+     "tp": 12,
+     "fp": 0,
+     "fn": 1,
+     "precision": 1.0,
+     "recall": 0.9231,
+     "false_positives": [],
+     "false_negatives": [
+      "SEC-HARDCODED-SECRET-DEFAULT app/core/config.py:5"
+     ],
+     "rules_with_truncated_evidence": []
+    },
+    "per_rule": {
+     "CFG-NO-ENV-TEMPLATE": "TN",
+     "CFG-REQUIRED-ENV-AT-IMPORT": "TP",
+     "CFG-UNDOCUMENTED-ENV": "TP",
+     "EH-BARE-EXCEPT": "TP",
+     "EH-NO-GLOBAL-HANDLER": "TP",
+     "EH-SWALLOWED-BROAD": "TP",
+     "LOG-NONE": "TN",
+     "LOG-PRINT": "TP",
+     "MAINT-IMPORT-CYCLE": "TN",
+     "SEC-CORS-WILDCARD": "TP",
+     "SEC-DEBUG-MODE": "TN",
+     "SEC-DYNAMIC-EXEC": "TN",
+     "SEC-HARDCODED-SECRET-DEFAULT": "FN",
+     "SEC-JWT-VERIFY-DISABLED": "TN",
+     "SEC-NO-AUTH-DETECTED": "TN",
+     "SEC-SHELL-EXEC": "TP",
+     "SEC-SQL-STRING-BUILD": "TP",
+     "SEC-TLS-VERIFY-DISABLED": "TP",
+     "SEC-UNAUTH-MUTATION": "TP",
+     "SEC-UNSAFE-DESERIALIZE": "TN",
+     "SEC-WEAK-HASH": "TP",
+     "SEC-YAML-LOAD": "TN",
+     "TEST-NONE": "TN",
+     "TEST-UNREACHED-OTHER": "TP",
+     "TEST-UNREACHED-ROUTER": "TN"
+    },
+    "unassessed_findings": [
+     "TEST-RATIO"
+    ]
+   },
+   "clean_service": {
+    "rule_level": {
+     "tp": 1,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 1,
+     "n_gold": 1,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "tn": 24,
+     "assessed": 25
+    },
+    "location_level": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 0,
+     "precision": null,
+     "recall": null,
+     "false_positives": [],
+     "false_negatives": [],
+     "rules_with_truncated_evidence": []
+    },
+    "per_rule": {
+     "CFG-NO-ENV-TEMPLATE": "TN",
+     "CFG-REQUIRED-ENV-AT-IMPORT": "TN",
+     "CFG-UNDOCUMENTED-ENV": "TN",
+     "EH-BARE-EXCEPT": "TN",
+     "EH-NO-GLOBAL-HANDLER": "TP",
+     "EH-SWALLOWED-BROAD": "TN",
+     "LOG-NONE": "TN",
+     "LOG-PRINT": "TN",
+     "MAINT-IMPORT-CYCLE": "TN",
+     "SEC-CORS-WILDCARD": "TN",
+     "SEC-DEBUG-MODE": "TN",
+     "SEC-DYNAMIC-EXEC": "TN",
+     "SEC-HARDCODED-SECRET-DEFAULT": "TN",
+     "SEC-JWT-VERIFY-DISABLED": "TN",
+     "SEC-NO-AUTH-DETECTED": "TN",
+     "SEC-SHELL-EXEC": "TN",
+     "SEC-SQL-STRING-BUILD": "TN",
+     "SEC-TLS-VERIFY-DISABLED": "TN",
+     "SEC-UNAUTH-MUTATION": "TN",
+     "SEC-UNSAFE-DESERIALIZE": "TN",
+     "SEC-WEAK-HASH": "TN",
+     "SEC-YAML-LOAD": "TN",
+     "TEST-NONE": "TN",
+     "TEST-UNREACHED-OTHER": "TN",
+     "TEST-UNREACHED-ROUTER": "TN"
+    },
+    "unassessed_findings": [
+     "TEST-RATIO"
+    ]
+   },
+   "fastapi_template": {
+    "rule_level": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "tn": 18,
+     "assessed": 20
+    },
+    "location_level": {
+     "tp": 4,
+     "fp": 8,
+     "fn": 1,
+     "precision": 0.3333,
+     "recall": 0.8,
+     "false_positives": [
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/login.py:45",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/login.py:100",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:54",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:81",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:103",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:132",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:182",
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/users.py:214"
+     ],
+     "false_negatives": [
+      "SEC-UNAUTH-MUTATION backend/app/api/routes/private.py:23"
+     ],
+     "rules_with_truncated_evidence": [
+      "SEC-UNAUTH-MUTATION"
+     ]
+    },
+    "per_rule": {
+     "EH-BARE-EXCEPT": "TN",
+     "EH-NO-GLOBAL-HANDLER": "TP",
+     "EH-SWALLOWED-BROAD": "TN",
+     "LOG-NONE": "TN",
+     "LOG-PRINT": "TN",
+     "MAINT-IMPORT-CYCLE": "TN",
+     "SEC-CORS-WILDCARD": "TN",
+     "SEC-DEBUG-MODE": "TN",
+     "SEC-DYNAMIC-EXEC": "TN",
+     "SEC-HARDCODED-SECRET-DEFAULT": "TN",
+     "SEC-JWT-VERIFY-DISABLED": "TN",
+     "SEC-NO-AUTH-DETECTED": "TN",
+     "SEC-SHELL-EXEC": "TN",
+     "SEC-SQL-STRING-BUILD": "TN",
+     "SEC-TLS-VERIFY-DISABLED": "TN",
+     "SEC-UNAUTH-MUTATION": "TP",
+     "SEC-UNSAFE-DESERIALIZE": "TN",
+     "SEC-WEAK-HASH": "TN",
+     "SEC-YAML-LOAD": "TN",
+     "TEST-NONE": "TN"
+    },
+    "unassessed_findings": [
+     "SEC-SECRET-LIKE-CONTENT",
+     "TEST-RATIO",
+     "TEST-UNREACHED-OTHER"
+    ]
+   }
+  },
+  "impact": {
+   "shop-i1": {
+    "repo": "shop_api",
+    "affected_modules": {
+     "tp": 8,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 8,
+     "n_gold": 8,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "routes": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 5,
+     "n_gold": 5,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "relevant_tests": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "ignored_non_test_files": []
+    }
+   },
+   "shop-i2": {
+    "repo": "shop_api",
+    "affected_modules": {
+     "tp": 3,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3,
+     "n_gold": 3,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "routes": {
+     "tp": 3,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3,
+     "n_gold": 3,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "relevant_tests": {
+     "tp": 0,
+     "fp": 0,
+     "fn": 0,
+     "precision": null,
+     "recall": null,
+     "f1": null,
+     "n_pred": 0,
+     "n_gold": 0,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "ignored_non_test_files": []
+    }
+   },
+   "clean-i1": {
+    "repo": "clean_service",
+    "affected_modules": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "routes": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "relevant_tests": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "ignored_non_test_files": []
+    }
+   },
+   "ft-i1": {
+    "repo": "fastapi_template",
+    "affected_modules": {
+     "tp": 12,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 12,
+     "n_gold": 12,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "routes": {
+     "tp": 23,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 23,
+     "n_gold": 23,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "relevant_tests": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 5,
+     "n_gold": 5,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "ignored_non_test_files": [
+      "backend/tests/conftest.py",
+      "backend/tests/utils/item.py",
+      "backend/tests/utils/user.py"
+     ]
+    }
+   },
+   "ft-i2": {
+    "repo": "fastapi_template",
+    "affected_modules": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_gold": 2,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "routes": {
+     "tp": 5,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 5,
+     "n_gold": 5,
+     "exhaustive": true,
+     "missing": [],
+     "extra": []
+    },
+    "relevant_tests": {
+     "tp": 1,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 1,
+     "n_gold": 1,
+     "exhaustive": true,
+     "missing": [],
+     "extra": [],
+     "ignored_non_test_files": [
+      "backend/tests/conftest.py"
+     ]
+    }
+   }
+  },
+  "retrieval": {
+   "shop_api": {
+    "n_answerable": 8,
+    "n_unanswerable": 3,
+    "span_recall": 0.6875,
+    "mrr": 0.5521,
+    "hit@1": 0.5,
+    "hit@3": 0.5,
+    "hit@5": 0.625,
+    "hit@all": 0.75,
+    "snippet_precision": 0.1586,
+    "unanswerable_empty_retrieval_rate": 0.6667
+   },
+   "clean_service": {
+    "n_answerable": 2,
+    "n_unanswerable": 1,
+    "span_recall": 1.0,
+    "mrr": 0.625,
+    "hit@1": 0.5,
+    "hit@3": 0.5,
+    "hit@5": 1.0,
+    "hit@all": 1.0,
+    "snippet_precision": 0.2715,
+    "unanswerable_empty_retrieval_rate": 0.0
+   },
+   "fastapi_template": {
+    "n_answerable": 10,
+    "n_unanswerable": 3,
+    "span_recall": 0.4667,
+    "mrr": 0.14,
+    "hit@1": 0.0,
+    "hit@3": 0.2,
+    "hit@5": 0.3,
+    "hit@all": 0.6,
+    "snippet_precision": 0.0674,
+    "unanswerable_empty_retrieval_rate": 0.3333
+   }
+  },
+  "qa": {
+   "shop_api": {
+    "n": 11,
+    "n_answerable": 8,
+    "n_with_citations": 9,
+    "n_ai": 0,
+    "n_retrieval_only": 11,
+    "structured_output_valid_rate": 1.0,
+    "citation_validity": 1.0,
+    "citation_support_precision": 0.1875,
+    "citation_recall": 0.6875,
+    "key_fact_recall_ai": null,
+    "deterministic_accuracy_ai": null,
+    "abstention_recall_ai": null,
+    "false_abstention_rate_ai": null,
+    "accuracy_by_confidence_ai": {
+     "high": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "medium": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "low": {
+      "n": 0,
+      "deterministic_accuracy": null
+     }
+    },
+    "llm_error_codes": [
+     "LLM_NOT_CONFIGURED"
+    ]
+   },
+   "clean_service": {
+    "n": 3,
+    "n_answerable": 2,
+    "n_with_citations": 3,
+    "n_ai": 0,
+    "n_retrieval_only": 3,
+    "structured_output_valid_rate": 1.0,
+    "citation_validity": 1.0,
+    "citation_support_precision": 0.2833,
+    "citation_recall": 1.0,
+    "key_fact_recall_ai": null,
+    "deterministic_accuracy_ai": null,
+    "abstention_recall_ai": null,
+    "false_abstention_rate_ai": null,
+    "accuracy_by_confidence_ai": {
+     "high": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "medium": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "low": {
+      "n": 0,
+      "deterministic_accuracy": null
+     }
+    },
+    "llm_error_codes": [
+     "LLM_NOT_CONFIGURED"
+    ]
+   },
+   "fastapi_template": {
+    "n": 13,
+    "n_answerable": 10,
+    "n_with_citations": 12,
+    "n_ai": 0,
+    "n_retrieval_only": 13,
+    "structured_output_valid_rate": 1.0,
+    "citation_validity": 1.0,
+    "citation_support_precision": 0.0667,
+    "citation_recall": 0.25,
+    "key_fact_recall_ai": null,
+    "deterministic_accuracy_ai": null,
+    "abstention_recall_ai": null,
+    "false_abstention_rate_ai": null,
+    "accuracy_by_confidence_ai": {
+     "high": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "medium": {
+      "n": 0,
+      "deterministic_accuracy": null
+     },
+     "low": {
+      "n": 0,
+      "deterministic_accuracy": null
+     }
+    },
+    "llm_error_codes": [
+     "LLM_NOT_CONFIGURED"
+    ]
+   }
+  },
+  "judge": {}
+ },
+ "samples": {
+  "qa": [
+   {
+    "repo": "shop_api",
+    "id": "shop-q1",
+    "question": "How are user passwords hashed?",
+    "answerable": true,
+    "expected_answer": "hash_password in app/core/security.py computes hashlib.md5 over salt + password and returns the hex digest.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/api/deps.py lines 7-11\n- app/api/orders.py lines 11-13\n- app/api/orders.py lines 16-20\n- app/core/security.py lines 13-17\n- app/services/billing.py lines 11-24\n- app/core/security.py lines 20-28",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "excerpt": "def get_current_user(authorization: str = Header(...)) -> int:"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 11,
+      "end_line": 13,
+      "excerpt": "@router.get(\"/{order_id}\")"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 16,
+      "end_line": 20,
+      "excerpt": "@router.post(\"/\")"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 13,
+      "end_line": 17,
+      "excerpt": "def make_token(user_id: int) -> str:"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "excerpt": "def charge(user_id: int, product_id: int, quantity: int) -> dict:"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "excerpt": "def read_token(token: str) -> int | None:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 11,
+      "end_line": 13,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 16,
+      "end_line": 20,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 13,
+      "end_line": 17,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "reason": "related to `get_current_user` via calls"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "reason": "related to `read_order` via calls"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "related to `POST /api/orders/` via uses_model"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 8,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "app/core/security.py:9-10"
+     ]
+    },
+    "answer_scores": {
+     "id": "shop-q1",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q2",
+    "question": "Which API endpoints require an authenticated user?",
+    "answerable": true,
+    "expected_answer": "The orders endpoints GET /api/orders/{order_id} and POST /api/orders/ depend on get_current_user (app/api/deps.py), which validates the bearer token.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/api/deps.py lines 1-11\n- app/api/orders.py lines 1-20\n- app/api/products.py lines 1-18\n- app/api/router.py lines 1-7\n- app/core/security.py lines 20-28\n- app/db.py lines 17-19",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/api/deps.py",
+      "start_line": 1,
+      "end_line": 11,
+      "excerpt": "\"\"\"Request dependencies.\"\"\""
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 1,
+      "end_line": 20,
+      "excerpt": "from fastapi import APIRouter, Depends"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 1,
+      "end_line": 18,
+      "excerpt": "from fastapi import APIRouter"
+     },
+     {
+      "path": "app/api/router.py",
+      "start_line": 1,
+      "end_line": 7,
+      "excerpt": "from fastapi import APIRouter"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "excerpt": "def read_token(token: str) -> int | None:"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "excerpt": "def get_order(order_id: int):"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/api/deps.py",
+      "start_line": 1,
+      "end_line": 11,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 1,
+      "end_line": 20,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 1,
+      "end_line": 18,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "app/api/router.py",
+      "start_line": 1,
+      "end_line": 7,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "reason": "related to `get_current_user` via calls"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "reason": "related to `read_order` via calls"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "related to `POST /api/orders/` via uses_model"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 13,
+      "end_line": 17,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 1,
+      "end_line": 15,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 3,
+      "end_line": 14,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 11,
+     "span_recall": 1.0,
+     "hit@1": true,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 1.0,
+     "snippet_precision": 0.1818,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "shop-q2",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.3333,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q3",
+    "question": "What happens when a payment charge fails?",
+    "answerable": true,
+    "expected_answer": "charge() calls resp.raise_for_status(); on any exception it logs 'charge failed' with log.exception and re-raises the exception.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/services/billing.py lines 11-24\n- app/api/orders.py lines 17-20\n- app/core/config.py lines 3-14",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "excerpt": "def charge(user_id: int, product_id: int, quantity: int) -> dict:"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "excerpt": "def create_order(body: OrderIn, user_id: int = Depends(get_current_user)):"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 3,
+      "end_line": 14,
+      "excerpt": "DATABASE_URL = os.environ[\"DATABASE_URL\"]"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "name matches `charge`"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "reason": "related to `charge` via calls"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 3,
+      "end_line": 14,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 3,
+     "span_recall": 1.0,
+     "hit@1": true,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 1.0,
+     "snippet_precision": 0.3333,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "shop-q3",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 3,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.3333,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q4",
+    "question": "Where is the SQL query for product search built?",
+    "answerable": true,
+    "expected_answer": "find_products in app/db.py builds the query with an f-string that interpolates the search term into a LIKE clause.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/models.py lines 9-13\n- tests/test_products.py lines 4-7\n- app/api/products.py lines 10-11\n- app/db.py lines 1-26\n- app/models.py lines 29-31\n- app/services/billing.py lines 11-24",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/models.py",
+      "start_line": 9,
+      "end_line": 13,
+      "excerpt": "class Product(Base):"
+     },
+     {
+      "path": "tests/test_products.py",
+      "start_line": 4,
+      "end_line": 7,
+      "excerpt": "def test_search_products_returns_list(monkeypatch):"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 10,
+      "end_line": 11,
+      "excerpt": "def search_products(q: str = \"\"):"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 1,
+      "end_line": 26,
+      "excerpt": "\"\"\"Database access with raw SQL.\"\"\""
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "excerpt": "class OrderIn(BaseModel):"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "excerpt": "def charge(user_id: int, product_id: int, quantity: int) -> dict:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/models.py",
+      "start_line": 9,
+      "end_line": 13,
+      "reason": "name matches `product`"
+     },
+     {
+      "path": "tests/test_products.py",
+      "start_line": 4,
+      "end_line": 7,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 10,
+      "end_line": 11,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 1,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 23,
+      "end_line": 26,
+      "reason": "related to `search_products` via uses_model"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 7,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 0.25,
+     "snippet_precision": 0.1429,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "shop-q4",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q5",
+    "question": "How long are access tokens valid?",
+    "answerable": true,
+    "expected_answer": "30 minutes: Settings.token_ttl_minutes = 30 in app/core/config.py, used by make_token to compute the expiry.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/db.py lines 1-26",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/db.py",
+      "start_line": 1,
+      "end_line": 26,
+      "excerpt": "\"\"\"Database access with raw SQL.\"\"\""
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/db.py",
+      "start_line": 1,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 1,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "app/core/config.py:11-11",
+      "app/core/security.py:14-14"
+     ]
+    },
+    "answer_scores": {
+     "id": "shop-q5",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 1,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q6",
+    "question": "Which environment variables does the application read?",
+    "answerable": true,
+    "expected_answer": "DATABASE_URL (required at import), JWT_SECRET (with a hard-coded default) and PAYMENT_API_KEY, all in app/core/config.py.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/core/config.py lines 1-14\n- app/api/orders.py lines 12-13\n- app/core/security.py lines 20-28\n- app/api/deps.py lines 7-11\n- app/db.py lines 17-19\n- tests/test_security.py lines 4-5",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/core/config.py",
+      "start_line": 1,
+      "end_line": 14,
+      "excerpt": "\"\"\"Configuration read from the environment.\"\"\""
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 12,
+      "end_line": 13,
+      "excerpt": "def read_order(order_id: int, user_id: int = Depends(get_current_user)):"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "excerpt": "def read_token(token: str) -> int | None:"
+     },
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "excerpt": "def get_current_user(authorization: str = Header(...)) -> int:"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "excerpt": "def get_order(order_id: int):"
+     },
+     {
+      "path": "tests/test_security.py",
+      "start_line": 4,
+      "end_line": 5,
+      "excerpt": "def test_token_roundtrip():"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/core/config.py",
+      "start_line": 1,
+      "end_line": 14,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 12,
+      "end_line": 13,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/core/security.py",
+      "start_line": 20,
+      "end_line": 28,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "reason": "related to `read_token` via calls"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "reason": "related to `read_order` via calls"
+     },
+     {
+      "path": "tests/test_security.py",
+      "start_line": 4,
+      "end_line": 5,
+      "reason": "related to `read_token` via calls"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 6,
+     "span_recall": 1.0,
+     "hit@1": true,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 1.0,
+     "snippet_precision": 0.1667,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "shop-q6",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q7",
+    "question": "What URL prefix do the product routes use?",
+    "answerable": true,
+    "expected_answer": "/api/products: router.py mounts products.router at /products and main.py mounts api_router at /api.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/models.py lines 9-13\n- app/api/products.py lines 14-18\n- app/models.py lines 29-31\n- app/services/billing.py lines 11-24\n- app/api/orders.py lines 16-20\n- app/api/router.py lines 1-7",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/models.py",
+      "start_line": 9,
+      "end_line": 13,
+      "excerpt": "class Product(Base):"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 14,
+      "end_line": 18,
+      "excerpt": "@router.post(\"/import\")"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "excerpt": "class OrderIn(BaseModel):"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "excerpt": "def charge(user_id: int, product_id: int, quantity: int) -> dict:"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 16,
+      "end_line": 20,
+      "excerpt": "@router.post(\"/\")"
+     },
+     {
+      "path": "app/api/router.py",
+      "start_line": 1,
+      "end_line": 7,
+      "excerpt": "from fastapi import APIRouter"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/models.py",
+      "start_line": 9,
+      "end_line": 13,
+      "reason": "name matches `product`"
+     },
+     {
+      "path": "app/api/products.py",
+      "start_line": 14,
+      "end_line": 18,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 16,
+      "end_line": 20,
+      "reason": "related to `OrderIn` via uses_model"
+     },
+     {
+      "path": "app/api/router.py",
+      "start_line": 1,
+      "end_line": 7,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 1,
+      "end_line": 14,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 1,
+      "end_line": 16,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": ".env.example",
+      "start_line": 1,
+      "end_line": 2,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 9,
+     "span_recall": 0.5,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": true,
+     "reciprocal_rank": 0.1667,
+     "snippet_precision": 0.1111,
+     "missed_spans": [
+      "app/main.py:10-10"
+     ]
+    },
+    "answer_scores": {
+     "id": "shop-q7",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 0.5,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-q8",
+    "question": "Which external payment endpoint is called to charge a customer?",
+    "answerable": true,
+    "expected_answer": "POST https://payments.example.com/v1/charges via requests.post in app/services/billing.py.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/services/billing.py lines 11-24\n- app/api/orders.py lines 17-20\n- app/core/config.py lines 3-14",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "excerpt": "def charge(user_id: int, product_id: int, quantity: int) -> dict:"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "excerpt": "def create_order(body: OrderIn, user_id: int = Depends(get_current_user)):"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 3,
+      "end_line": 14,
+      "excerpt": "DATABASE_URL = os.environ[\"DATABASE_URL\"]"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/services/billing.py",
+      "start_line": 11,
+      "end_line": 24,
+      "reason": "name matches `charge`"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "reason": "related to `charge` via calls"
+     },
+     {
+      "path": "app/core/config.py",
+      "start_line": 3,
+      "end_line": 14,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 3,
+     "span_recall": 1.0,
+     "hit@1": true,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 1.0,
+     "snippet_precision": 0.3333,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "shop-q8",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 3,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.3333,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-u1",
+    "question": "How does the service send order confirmation emails?",
+    "answerable": false,
+    "expected_answer": "The repository contains no email sending code.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/models.py lines 16-20\n- app/api/orders.py lines 12-13\n- app/db.py lines 17-19\n- app/api/orders.py lines 17-20\n- app/api/deps.py lines 7-11\n- app/db.py lines 7-8",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/models.py",
+      "start_line": 16,
+      "end_line": 20,
+      "excerpt": "class Order(Base):"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 12,
+      "end_line": 13,
+      "excerpt": "def read_order(order_id: int, user_id: int = Depends(get_current_user)):"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "excerpt": "def get_order(order_id: int):"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "excerpt": "def create_order(body: OrderIn, user_id: int = Depends(get_current_user)):"
+     },
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "excerpt": "def get_current_user(authorization: str = Header(...)) -> int:"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 7,
+      "end_line": 8,
+      "excerpt": "def connect():"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/models.py",
+      "start_line": 16,
+      "end_line": 20,
+      "reason": "name matches `order`"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 12,
+      "end_line": 13,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 17,
+      "end_line": 19,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/orders.py",
+      "start_line": 17,
+      "end_line": 20,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/api/deps.py",
+      "start_line": 7,
+      "end_line": 11,
+      "reason": "related to `GET /api/orders/{order_id}` via uses_dependency"
+     },
+     {
+      "path": "app/db.py",
+      "start_line": 7,
+      "end_line": 8,
+      "reason": "related to `get_order` via calls"
+     },
+     {
+      "path": "README.md",
+      "start_line": 1,
+      "end_line": 3,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "app/models.py",
+      "start_line": 26,
+      "end_line": 31,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 8,
+     "empty": false
+    },
+    "answer_scores": {
+     "id": "shop-u1",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-u2",
+    "question": "Which Redis keys does the cache layer use?",
+    "answerable": false,
+    "expected_answer": "There is no Redis or cache layer in the repository.",
+    "answer": "I could not find relevant code for this question in the analyzed revision. Try asking with a concrete symbol, route, or file name (for example redis, keys, cache, layer).",
+    "inferred": [],
+    "citations": [],
+    "limitations": [
+     "No relevant code was retrieved for this question."
+    ],
+    "retrieved": [],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 0,
+     "empty": true
+    },
+    "answer_scores": {
+     "id": "shop-u2",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 0,
+     "structure_problems": [],
+     "citation_validity": null,
+     "n_inferred": 0,
+     "error_code": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "shop_api",
+    "id": "shop-u3",
+    "question": "Where is the Kubernetes deployment manifest?",
+    "answerable": false,
+    "expected_answer": "The repository has no Kubernetes manifests.",
+    "answer": "I could not find relevant code for this question in the analyzed revision. Try asking with a concrete symbol, route, or file name (for example kubernetes, deployment, manifest).",
+    "inferred": [],
+    "citations": [],
+    "limitations": [
+     "No relevant code was retrieved for this question."
+    ],
+    "retrieved": [],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 0,
+     "empty": true
+    },
+    "answer_scores": {
+     "id": "shop-u3",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 0,
+     "structure_problems": [],
+     "citation_validity": null,
+     "n_inferred": 0,
+     "error_code": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "clean_service",
+    "id": "clean-q1",
+    "question": "How is the API token checked?",
+    "answerable": true,
+    "expected_answer": "require_token compares the X-API-Token header with get_api_token() (read from the API_TOKEN environment variable) and raises 401 when they differ; both routes depend on it.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/settings.py lines 8-12\n- app/main.py lines 13-15\n- app/main.py lines 18-24\n- app/main.py lines 27-29\n- .env.example lines 1-2",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/settings.py",
+      "start_line": 8,
+      "end_line": 12,
+      "excerpt": "def get_api_token() -> str:"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 13,
+      "end_line": 15,
+      "excerpt": "def require_token(x_api_token: str = Header(...)) -> None:"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 18,
+      "end_line": 24,
+      "excerpt": "@app.get(\"/items/{item_id}\")"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 27,
+      "end_line": 29,
+      "excerpt": "@app.post(\"/items\")"
+     },
+     {
+      "path": ".env.example",
+      "start_line": 1,
+      "end_line": 2,
+      "excerpt": "APP_DB_PATH="
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/settings.py",
+      "start_line": 8,
+      "end_line": 12,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 13,
+      "end_line": 15,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 18,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 27,
+      "end_line": 29,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": ".env.example",
+      "start_line": 1,
+      "end_line": 2,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 5,
+     "span_recall": 1.0,
+     "hit@1": true,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 1.0,
+     "snippet_precision": 0.4,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "clean-q1",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 5,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.4,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "clean_service",
+    "id": "clean-q2",
+    "question": "What happens when adding a duplicate item?",
+    "answerable": true,
+    "expected_answer": "add_item catches sqlite3.IntegrityError, logs a 'duplicate item' warning and re-raises.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/main.py lines 19-24\n- app/store.py lines 15-17\n- app/main.py lines 28-29\n- app/store.py lines 20-27\n- tests/test_store.py lines 4-6\n- app/main.py lines 13-15",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/main.py",
+      "start_line": 19,
+      "end_line": 24,
+      "excerpt": "def read_item(item_id: int, _: None = Depends(require_token)):"
+     },
+     {
+      "path": "app/store.py",
+      "start_line": 15,
+      "end_line": 17,
+      "excerpt": "def get_item(item_id: int):"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 28,
+      "end_line": 29,
+      "excerpt": "def add_item(name: str, _: None = Depends(require_token)):"
+     },
+     {
+      "path": "app/store.py",
+      "start_line": 20,
+      "end_line": 27,
+      "excerpt": "def add_item(name: str) -> int:"
+     },
+     {
+      "path": "tests/test_store.py",
+      "start_line": 4,
+      "end_line": 6,
+      "excerpt": "def test_get_item_is_callable(monkeypatch, tmp_path):"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 13,
+      "end_line": 15,
+      "excerpt": "def require_token(x_api_token: str = Header(...)) -> None:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/main.py",
+      "start_line": 19,
+      "end_line": 24,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/store.py",
+      "start_line": 15,
+      "end_line": 17,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 28,
+      "end_line": 29,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/store.py",
+      "start_line": 20,
+      "end_line": 27,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "tests/test_store.py",
+      "start_line": 4,
+      "end_line": 6,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "app/main.py",
+      "start_line": 13,
+      "end_line": 15,
+      "reason": "related to `GET /items/{item_id}` via uses_dependency"
+     },
+     {
+      "path": "app/store.py",
+      "start_line": 11,
+      "end_line": 12,
+      "reason": "related to `get_item` via calls"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 7,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 0.25,
+     "snippet_precision": 0.1429,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "clean-q2",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "clean_service",
+    "id": "clean-u1",
+    "question": "Which message queue does the service publish events to?",
+    "answerable": false,
+    "expected_answer": "The service publishes no events; there is no message queue.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- app/main.py lines 1-29\n- README.md lines 1-3",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "app/main.py",
+      "start_line": 1,
+      "end_line": 29,
+      "excerpt": "\"\"\"Inventory service.\"\"\""
+     },
+     {
+      "path": "README.md",
+      "start_line": 1,
+      "end_line": 3,
+      "excerpt": "# Inventory service"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "app/main.py",
+      "start_line": 1,
+      "end_line": 29,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "README.md",
+      "start_line": 1,
+      "end_line": 3,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 2,
+     "empty": false
+    },
+    "answer_scores": {
+     "id": "clean-u1",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 2,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q1",
+    "question": "How does the API authenticate the current user from a request?",
+    "answerable": true,
+    "expected_answer": "api/deps.py defines reusable_oauth2 = OAuth2PasswordBearer(tokenUrl=f\"{settings.API_V1_STR}/login/access-token\"). get_current_user decodes the bearer JWT with settings.SECRET_KEY and security.ALGORITHM, loads the User, and rejects missing (404) or inactive (400) users; routes receive it through the CurrentUser annotation.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/crud.py lines 45-60\n- backend/app/models.py lines 51-55\n- backend/app/api/deps.py lines 1-57\n- backend/app/api/main.py lines 1-14\n- backend/app/api/routes/items.py lines 1-60\n- backend/app/api/routes/items.py lines 61-72",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 45,
+      "end_line": 60,
+      "excerpt": "def authenticate(*, session: Session, email: str, password: str) -> User | None:"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 51,
+      "end_line": 55,
+      "excerpt": "class User(UserBase, table=True):"
+     },
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 1,
+      "end_line": 57,
+      "excerpt": "from collections.abc import Generator"
+     },
+     {
+      "path": "backend/app/api/main.py",
+      "start_line": 1,
+      "end_line": 14,
+      "excerpt": "from fastapi import APIRouter"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 1,
+      "end_line": 60,
+      "excerpt": "import uuid"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 61,
+      "end_line": 72,
+      "excerpt": "@router.post(\"/\", response_model=ItemPublic)"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 45,
+      "end_line": 60,
+      "reason": "name matches `authenticate`"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 51,
+      "end_line": 55,
+      "reason": "name matches `user`"
+     },
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 1,
+      "end_line": 57,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/main.py",
+      "start_line": 1,
+      "end_line": 14,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 1,
+      "end_line": 60,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 61,
+      "end_line": 72,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 75,
+      "end_line": 96,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 99,
+      "end_line": 113,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 1,
+      "end_line": 60,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 77,
+      "end_line": 97,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 100,
+      "end_line": 123,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/private.py",
+      "start_line": 1,
+      "end_line": 38,
+      "reason": "matches `API`"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 0.3333,
+     "snippet_precision": 0.0833,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "ft-q1",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q2",
+    "question": "Which library and algorithms are used to hash passwords?",
+    "answerable": true,
+    "expected_answer": "pwdlib's PasswordHash configured with Argon2Hasher and BcryptHasher (app/core/security.py); get_password_hash and verify_password use it.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/tests/api/routes/test_login.py lines 165-191\n- backend/app/core/security.py lines 35-36\n- backend/tests/api/routes/test_login.py lines 129-162\n- backend/tests/crud/test_user.py lines 96-130\n- backend/app/models.py lines 51-55\n- backend/tests/utils/utils.py lines 9-10",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 165,
+      "end_line": 191,
+      "excerpt": "def test_login_with_argon2_password_keeps_hash(client: TestClient, db: Session) -> None:"
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 35,
+      "end_line": 36,
+      "excerpt": "def get_password_hash(password: str) -> str:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 129,
+      "end_line": 162,
+      "excerpt": "def test_login_with_bcrypt_password_upgrades_to_argon2("
+     },
+     {
+      "path": "backend/tests/crud/test_user.py",
+      "start_line": 96,
+      "end_line": 130,
+      "excerpt": "def test_authenticate_user_with_bcrypt_upgrades_to_argon2(db: Session) -> None:"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 51,
+      "end_line": 55,
+      "excerpt": "class User(UserBase, table=True):"
+     },
+     {
+      "path": "backend/tests/utils/utils.py",
+      "start_line": 9,
+      "end_line": 10,
+      "excerpt": "def random_lower_string() -> str:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 165,
+      "end_line": 191,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 35,
+      "end_line": 36,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 129,
+      "end_line": 162,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/crud/test_user.py",
+      "start_line": 96,
+      "end_line": 130,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 51,
+      "end_line": 55,
+      "reason": "related to `test_login_with_argon2_password_keeps_hash` via uses_model"
+     },
+     {
+      "path": "backend/tests/utils/utils.py",
+      "start_line": 9,
+      "end_line": 10,
+      "reason": "related to `test_login_with_argon2_password_keeps_hash` via calls"
+     },
+     {
+      "path": "backend/tests/utils/utils.py",
+      "start_line": 13,
+      "end_line": 14,
+      "reason": "related to `test_login_with_argon2_password_keeps_hash` via calls"
+     },
+     {
+      "path": "backend/app/api/routes/private.py",
+      "start_line": 24,
+      "end_line": 38,
+      "reason": "related to `get_password_hash` via calls"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 104,
+      "end_line": 121,
+      "reason": "related to `get_password_hash` via calls"
+     },
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 10,
+      "end_line": 17,
+      "reason": "related to `get_password_hash` via calls"
+     },
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 20,
+      "end_line": 31,
+      "reason": "related to `get_password_hash` via calls"
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 29,
+      "end_line": 32,
+      "reason": "related to `test_login_with_bcrypt_password_upgrades_to_argon2` via calls"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "backend/app/core/security.py:5-16"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q2",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q3",
+    "question": "Which algorithm signs access tokens?",
+    "answerable": true,
+    "expected_answer": "HS256 (ALGORITHM in app/core/security.py); create_access_token calls jwt.encode with settings.SECRET_KEY.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/api/routes/login.py lines 24-42\n- backend/app/core/security.py lines 22-26\n- backend/tests/api/routes/test_login.py lines 16-25\n- backend/tests/api/routes/test_login.py lines 28-34\n- backend/tests/api/routes/test_login.py lines 37-46\n- backend/app/api/routes/login.py lines 46-50",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 24,
+      "end_line": 42,
+      "excerpt": "def login_access_token("
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 22,
+      "end_line": 26,
+      "excerpt": "def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 16,
+      "end_line": 25,
+      "excerpt": "def test_get_access_token(client: TestClient) -> None:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 28,
+      "end_line": 34,
+      "excerpt": "def test_get_access_token_incorrect_password(client: TestClient) -> None:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 37,
+      "end_line": 46,
+      "excerpt": "def test_use_access_token("
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 46,
+      "end_line": 50,
+      "excerpt": "def test_token(current_user: CurrentUser) -> Any:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 24,
+      "end_line": 42,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 22,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 16,
+      "end_line": 25,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 28,
+      "end_line": 34,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 37,
+      "end_line": 46,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 46,
+      "end_line": 50,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 15,
+      "end_line": 74,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 114,
+      "end_line": 116,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 45,
+      "end_line": 60,
+      "reason": "related to `login_access_token` via calls"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 98,
+      "end_line": 113,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/tests/utils/utils.py",
+      "start_line": 19,
+      "end_line": 26,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 11,
+     "span_recall": 0.5,
+     "hit@1": false,
+     "hit@3": true,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 0.5,
+     "snippet_precision": 0.0909,
+     "missed_spans": [
+      "backend/app/core/security.py:19-19"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q3",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.1667,
+     "citation_recall": 0.5,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q4",
+    "question": "What is the API version prefix and where is it applied?",
+    "answerable": true,
+    "expected_answer": "Settings.API_V1_STR defaults to /api/v1 (app/core/config.py) and app/main.py includes api_router with prefix=settings.API_V1_STR.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/api/deps.py lines 1-57\n- backend/app/api/main.py lines 1-14\n- backend/app/api/routes/items.py lines 1-60\n- backend/app/api/routes/items.py lines 61-72\n- backend/app/api/routes/items.py lines 75-96\n- backend/app/api/routes/items.py lines 99-113",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 1,
+      "end_line": 57,
+      "excerpt": "from collections.abc import Generator"
+     },
+     {
+      "path": "backend/app/api/main.py",
+      "start_line": 1,
+      "end_line": 14,
+      "excerpt": "from fastapi import APIRouter"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 1,
+      "end_line": 60,
+      "excerpt": "import uuid"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 61,
+      "end_line": 72,
+      "excerpt": "@router.post(\"/\", response_model=ItemPublic)"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 75,
+      "end_line": 96,
+      "excerpt": "@router.put(\"/{id}\", response_model=ItemPublic)"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 99,
+      "end_line": 113,
+      "excerpt": "@router.delete(\"/{id}\")"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 1,
+      "end_line": 57,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/main.py",
+      "start_line": 1,
+      "end_line": 14,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 1,
+      "end_line": 60,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 61,
+      "end_line": 72,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 75,
+      "end_line": 96,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 99,
+      "end_line": 113,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 1,
+      "end_line": 60,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 77,
+      "end_line": 97,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 100,
+      "end_line": 123,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/private.py",
+      "start_line": 1,
+      "end_line": 38,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 1,
+      "end_line": 60,
+      "reason": "matches `API`"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "full-text match on name/docstring"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "backend/app/core/config.py:22-22",
+      "backend/app/main.py:35-35"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q4",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q5",
+    "question": "How long are access tokens valid by default?",
+    "answerable": true,
+    "expected_answer": "ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 8, i.e. 8 days (app/core/config.py).",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/api/routes/login.py lines 24-42\n- backend/app/core/security.py lines 22-26\n- backend/tests/api/routes/test_login.py lines 16-25\n- backend/tests/api/routes/test_login.py lines 28-34\n- backend/tests/api/routes/test_login.py lines 37-46\n- backend/app/api/routes/login.py lines 46-50",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 24,
+      "end_line": 42,
+      "excerpt": "def login_access_token("
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 22,
+      "end_line": 26,
+      "excerpt": "def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 16,
+      "end_line": 25,
+      "excerpt": "def test_get_access_token(client: TestClient) -> None:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 28,
+      "end_line": 34,
+      "excerpt": "def test_get_access_token_incorrect_password(client: TestClient) -> None:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 37,
+      "end_line": 46,
+      "excerpt": "def test_use_access_token("
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 46,
+      "end_line": 50,
+      "excerpt": "def test_token(current_user: CurrentUser) -> Any:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 24,
+      "end_line": 42,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/security.py",
+      "start_line": 22,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 16,
+      "end_line": 25,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 28,
+      "end_line": 34,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_login.py",
+      "start_line": 37,
+      "end_line": 46,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 46,
+      "end_line": 50,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 15,
+      "end_line": 74,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 80,
+      "end_line": 88,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 114,
+      "end_line": 116,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/utils/user.py",
+      "start_line": 30,
+      "end_line": 49,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 45,
+      "end_line": 60,
+      "reason": "related to `login_access_token` via calls"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 14,
+      "end_line": 29,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": true,
+     "reciprocal_rank": 0.1429,
+     "snippet_precision": 0.0833,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "ft-q5",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q6",
+    "question": "Which database tables are defined?",
+    "answerable": true,
+    "expected_answer": "Two SQLModel table models in app/models.py: User and Item (both declared with table=True).",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/core/config.py lines 15-74\n- backend/README.md lines 15-30\n- backend/README.md lines 92-107\n- backend/app/models.py lines 47-62\n- backend/app/models.py lines 83-98\n- backend/app/core/db.py lines 4-19",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 15,
+      "end_line": 74,
+      "excerpt": "class Settings(BaseSettings):"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 15,
+      "end_line": 30,
+      "excerpt": "$ docker compose up -d db mailpit"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 92,
+      "end_line": 107,
+      "excerpt": "## Migrations"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 47,
+      "end_line": 62,
+      "excerpt": "new_password: str = Field(min_length=8, max_length=128)"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 83,
+      "end_line": 98,
+      "excerpt": "description: str | None = Field(default=None, max_length=255)"
+     },
+     {
+      "path": "backend/app/core/db.py",
+      "start_line": 4,
+      "end_line": 19,
+      "excerpt": "from app.core.config import settings"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 15,
+      "end_line": 74,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 15,
+      "end_line": 30,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 92,
+      "end_line": 107,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 47,
+      "end_line": 62,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 83,
+      "end_line": 98,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/core/db.py",
+      "start_line": 4,
+      "end_line": 19,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/alembic.ini",
+      "start_line": 1,
+      "end_line": 13,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/alembic/README",
+      "start_line": 1,
+      "end_line": 1,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 8,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": true,
+     "hit@all": true,
+     "reciprocal_rank": 0.25,
+     "snippet_precision": 0.25,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "ft-q6",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.3333,
+     "citation_recall": 1.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q7",
+    "question": "When is the private router enabled?",
+    "answerable": true,
+    "expected_answer": "app/api/main.py includes private.router only when settings.FASTAPI_ENV == \"development\".",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/api/routes/items.py lines 99-113\n- backend/app/api/routes/login.py lines 23-42\n- backend/app/api/routes/login.py lines 53-74\n- backend/app/api/routes/login.py lines 77-97\n- backend/app/api/routes/utils.py lines 29-31\n- backend/app/core/config.py lines 61-62",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 99,
+      "end_line": 113,
+      "excerpt": "@router.delete(\"/{id}\")"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 23,
+      "end_line": 42,
+      "excerpt": "@router.post(\"/login/access-token\")"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 53,
+      "end_line": 74,
+      "excerpt": "@router.post(\"/password-recovery/{email}\")"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 77,
+      "end_line": 97,
+      "excerpt": "@router.post(\"/reset-password/\")"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 29,
+      "end_line": 31,
+      "excerpt": "@router.get(\"/health-check/\")"
+     },
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 61,
+      "end_line": 62,
+      "excerpt": "def emails_enabled(self) -> bool:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/api/routes/items.py",
+      "start_line": 99,
+      "end_line": 113,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 23,
+      "end_line": 42,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 53,
+      "end_line": 74,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 77,
+      "end_line": 97,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 29,
+      "end_line": 31,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/core/config.py",
+      "start_line": 61,
+      "end_line": 62,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 32,
+      "end_line": 37,
+      "reason": "related to `POST /{?settings.API_V1_STR}/reset-password/` via uses_model"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 87,
+      "end_line": 93,
+      "reason": "related to `DELETE /{?settings.API_V1_STR}/items/{id}` via uses_model"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 109,
+      "end_line": 110,
+      "reason": "related to `DELETE /{?settings.API_V1_STR}/items/{id}` via uses_model"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 114,
+      "end_line": 116,
+      "reason": "related to `POST /{?settings.API_V1_STR}/login/access-token` via uses_model"
+     },
+     {
+      "path": "backend/app/models.py",
+      "start_line": 124,
+      "end_line": 126,
+      "reason": "related to `POST /{?settings.API_V1_STR}/reset-password/` via uses_model"
+     },
+     {
+      "path": "backend/app/api/main.py",
+      "start_line": 1,
+      "end_line": 13,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 1.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": true,
+     "reciprocal_rank": 0.0833,
+     "snippet_precision": 0.0833,
+     "missed_spans": []
+    },
+    "answer_scores": {
+     "id": "ft-q7",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q8",
+    "question": "How is CORS configured?",
+    "answerable": true,
+    "expected_answer": "app/main.py adds CORSMiddleware with allow_origins=[settings.FRONTEND_HOST], allow_credentials=True and allow_methods/allow_headers ['*'].",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/README.md lines 35-50\n- backend/README.md lines 94-109",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/README.md",
+      "start_line": 35,
+      "end_line": 50,
+      "excerpt": "There are already configurations in place to run the backend through the VS Code debugger, so that you can use breakpoints, pause and explore variables, etc."
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 94,
+      "end_line": 109,
+      "excerpt": "Make sure you create a revision of your models and upgrade the database with that revision every time you change them. From the `backend` directory, use `uv` to"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/README.md",
+      "start_line": 35,
+      "end_line": 50,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 94,
+      "end_line": 109,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 2,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "backend/app/main.py:27-33"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q8",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 2,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q9",
+    "question": "Which routes require superuser privileges?",
+    "answerable": true,
+    "expected_answer": "Routes declared with dependencies=[Depends(get_current_active_superuser)]: GET and POST /users/, PATCH and DELETE /users/{user_id}, POST /password-recovery-html-content/{email} and POST /utils/test-email/.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/tests/api/routes/test_users.py lines 15-23\n- backend/tests/api/routes/test_users.py lines 60-76\n- backend/tests/api/routes/test_users.py lines 79-87\n- backend/tests/api/routes/test_users.py lines 451-460\n- backend/app/api/deps.py lines 52-57\n- backend/tests/api/routes/test_users.py lines 508-521",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 15,
+      "end_line": 23,
+      "excerpt": "def test_get_users_superuser_me("
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 60,
+      "end_line": 76,
+      "excerpt": "def test_get_existing_user_as_superuser("
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 79,
+      "end_line": 87,
+      "excerpt": "def test_get_non_existing_user_as_superuser("
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 451,
+      "end_line": 460,
+      "excerpt": "def test_delete_user_me_as_superuser("
+     },
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 52,
+      "end_line": 57,
+      "excerpt": "def get_current_active_superuser(current_user: CurrentUser) -> User:"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 508,
+      "end_line": 521,
+      "excerpt": "def test_delete_user_without_privileges("
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 15,
+      "end_line": 23,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 60,
+      "end_line": 76,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 79,
+      "end_line": 87,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 451,
+      "end_line": 460,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/deps.py",
+      "start_line": 52,
+      "end_line": 57,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 508,
+      "end_line": 521,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/crud/test_user.py",
+      "start_line": 53,
+      "end_line": 58,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/crud/test_user.py",
+      "start_line": 61,
+      "end_line": 66,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/utils/utils.py",
+      "start_line": 17,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/conftest.py",
+      "start_line": 34,
+      "end_line": 35,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 100,
+      "end_line": 123,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 37,
+      "end_line": 51,
+      "reason": "full-text match on name/docstring"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 0.1667,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": true,
+     "reciprocal_rank": 0.0909,
+     "snippet_precision": 0.0833,
+     "missed_spans": [
+      "backend/app/api/routes/users.py:32-36",
+      "backend/app/api/routes/users.py:54-56",
+      "backend/app/api/routes/users.py:182-186",
+      "backend/app/api/routes/users.py:214-214",
+      "backend/app/api/routes/utils.py:11-15"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q9",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-q10",
+    "question": "How does login avoid leaking whether an email exists through response timing?",
+    "answerable": true,
+    "expected_answer": "crud.authenticate still runs verify_password against DUMMY_HASH when no user has that email, so the response time is similar either way.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/tests/api/routes/test_users.py lines 282-297\n- backend/tests/api/routes/test_users.py lines 397-417\n- backend/app/api/routes/login.py lines 105-123\n- backend/app/utils.py lines 70-84\n- backend/tests/utils/user.py lines 30-49\n- backend/app/api/routes/utils.py lines 16-26",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 282,
+      "end_line": 297,
+      "excerpt": "def test_update_user_me_email_exists("
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 397,
+      "end_line": 417,
+      "excerpt": "def test_update_user_email_exists("
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 105,
+      "end_line": 123,
+      "excerpt": "def recover_password_html_content(email: str, session: SessionDep) -> Any:"
+     },
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 70,
+      "end_line": 84,
+      "excerpt": "def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:"
+     },
+     {
+      "path": "backend/tests/utils/user.py",
+      "start_line": 30,
+      "end_line": 49,
+      "excerpt": "def authentication_token_from_email("
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 16,
+      "end_line": 26,
+      "excerpt": "def test_email(email_to: EmailStr) -> Message:"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 282,
+      "end_line": 297,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/api/routes/test_users.py",
+      "start_line": 397,
+      "end_line": 417,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 105,
+      "end_line": 123,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 70,
+      "end_line": 84,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/tests/utils/user.py",
+      "start_line": 30,
+      "end_line": 49,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 16,
+      "end_line": 26,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/crud.py",
+      "start_line": 34,
+      "end_line": 37,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 34,
+      "end_line": 57,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 60,
+      "end_line": 67,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 87,
+      "end_line": 102,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 24,
+      "end_line": 42,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 53,
+      "end_line": 74,
+      "reason": "full-text match on name/docstring"
+     }
+    ],
+    "retrieval": {
+     "answerable": true,
+     "n_retrieved": 12,
+     "span_recall": 0.0,
+     "hit@1": false,
+     "hit@3": false,
+     "hit@5": false,
+     "hit@all": false,
+     "reciprocal_rank": 0.0,
+     "snippet_precision": 0.0,
+     "missed_spans": [
+      "backend/app/crud.py:45-51"
+     ]
+    },
+    "answer_scores": {
+     "id": "ft-q10",
+     "answerable": true,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "citation_support_precision": 0.0,
+     "citation_recall": 0.0,
+     "key_fact_recall": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-u1",
+    "question": "How does the backend send SMS notifications through Twilio?",
+    "answerable": false,
+    "expected_answer": "The backend has no SMS or Twilio integration.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/app/utils.py lines 34-57\n- backend/app/api/routes/login.py lines 54-74\n- backend/app/api/routes/users.py lines 57-78\n- backend/app/api/routes/utils.py lines 16-26\n- backend/README.md lines 1-13\n- backend/README.md lines 15-30",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 34,
+      "end_line": 57,
+      "excerpt": "def send_email("
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 54,
+      "end_line": 74,
+      "excerpt": "def recover_password(email: str, session: SessionDep) -> Message:"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 57,
+      "end_line": 78,
+      "excerpt": "def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 16,
+      "end_line": 26,
+      "excerpt": "def test_email(email_to: EmailStr) -> Message:"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 1,
+      "end_line": 13,
+      "excerpt": "# FastAPI Project - Backend"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 15,
+      "end_line": 30,
+      "excerpt": "$ docker compose up -d db mailpit"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/app/utils.py",
+      "start_line": 34,
+      "end_line": 57,
+      "reason": "full-text match on name/docstring"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 54,
+      "end_line": 74,
+      "reason": "related to `send_email` via calls"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 57,
+      "end_line": 78,
+      "reason": "related to `send_email` via calls"
+     },
+     {
+      "path": "backend/app/api/routes/utils.py",
+      "start_line": 16,
+      "end_line": 26,
+      "reason": "related to `send_email` via calls"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 1,
+      "end_line": 13,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/README.md",
+      "start_line": 15,
+      "end_line": 30,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/api/routes/login.py",
+      "start_line": 13,
+      "end_line": 28,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/app/api/routes/users.py",
+      "start_line": 24,
+      "end_line": 39,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/pyproject.toml",
+      "start_line": 31,
+      "end_line": 46,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 9,
+     "empty": false
+    },
+    "answer_scores": {
+     "id": "ft-u1",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 6,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-u2",
+    "question": "Which Redis instance is used to cache sessions?",
+    "answerable": false,
+    "expected_answer": "The backend uses no Redis and no session cache.",
+    "answer": "AI answering is unavailable right now, so here are the most relevant source locations found for your question. Inspect them directly:\n- backend/Dockerfile lines 28-43\n- backend/Dockerfile lines 55-65",
+    "inferred": [],
+    "citations": [
+     {
+      "path": "backend/Dockerfile",
+      "start_line": 28,
+      "end_line": 43,
+      "excerpt": "# Ref: https://docs.astral.sh/uv/guides/integration/docker/#compiling-bytecode"
+     },
+     {
+      "path": "backend/Dockerfile",
+      "start_line": 55,
+      "end_line": 65,
+      "excerpt": "# Sync the project"
+     }
+    ],
+    "limitations": [
+     "AI answering unavailable: The language model provider is not configured."
+    ],
+    "retrieved": [
+     {
+      "path": "backend/Dockerfile",
+      "start_line": 28,
+      "end_line": 43,
+      "reason": "source text matches question terms"
+     },
+     {
+      "path": "backend/Dockerfile",
+      "start_line": 55,
+      "end_line": 65,
+      "reason": "source text matches question terms"
+     }
+    ],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 2,
+     "empty": false
+    },
+    "answer_scores": {
+     "id": "ft-u2",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 2,
+     "structure_problems": [],
+     "citation_validity": 1.0,
+     "n_inferred": 0,
+     "error_code": "LLM_NOT_CONFIGURED",
+     "correct_deterministic": false
+    },
+    "judge": null
+   },
+   {
+    "repo": "fastapi_template",
+    "id": "ft-u3",
+    "question": "How are Stripe payments processed?",
+    "answerable": false,
+    "expected_answer": "There is no payment or Stripe code.",
+    "answer": "I could not find relevant code for this question in the analyzed revision. Try asking with a concrete symbol, route, or file name (for example stripe, payments, processed).",
+    "inferred": [],
+    "citations": [],
+    "limitations": [
+     "No relevant code was retrieved for this question."
+    ],
+    "retrieved": [],
+    "retrieval": {
+     "answerable": false,
+     "n_retrieved": 0,
+     "empty": true
+    },
+    "answer_scores": {
+     "id": "ft-u3",
+     "answerable": false,
+     "answer_source": "retrieval_only",
+     "confidence": "low",
+     "abstained": true,
+     "n_citations": 0,
+     "structure_problems": [],
+     "citation_validity": null,
+     "n_inferred": 0,
+     "error_code": null,
+     "correct_deterministic": false
+    },
+    "judge": null
+   }
+  ],
+  "impact": [
+   {
+    "id": "shop-i1",
+    "repo": "shop_api",
+    "changed": [
+     "app/core/config.py"
+    ],
+    "predicted": {
+     "affected_modules": [
+      "app/api/deps.py",
+      "app/api/orders.py",
+      "app/api/products.py",
+      "app/api/router.py",
+      "app/core/security.py",
+      "app/db.py",
+      "app/main.py",
+      "app/services/billing.py"
+     ],
+     "routes": [
+      "GET /api/orders/{order_id}",
+      "GET /api/products/",
+      "GET /health",
+      "POST /api/orders/",
+      "POST /api/products/import"
+     ],
+     "tests": [
+      "tests/test_products.py",
+      "tests/test_security.py"
+     ]
+    }
+   },
+   {
+    "id": "shop-i2",
+    "repo": "shop_api",
+    "changed": [
+     "app/services/billing.py"
+    ],
+    "predicted": {
+     "affected_modules": [
+      "app/api/orders.py",
+      "app/api/router.py",
+      "app/main.py"
+     ],
+     "routes": [
+      "GET /api/orders/{order_id}",
+      "GET /health",
+      "POST /api/orders/"
+     ],
+     "tests": []
+    }
+   },
+   {
+    "id": "clean-i1",
+    "repo": "clean_service",
+    "changed": [
+     "app/settings.py"
+    ],
+    "predicted": {
+     "affected_modules": [
+      "app/main.py",
+      "app/store.py"
+     ],
+     "routes": [
+      "GET /items/{item_id}",
+      "POST /items"
+     ],
+     "tests": [
+      "tests/test_main.py",
+      "tests/test_store.py"
+     ]
+    }
+   },
+   {
+    "id": "ft-i1",
+    "repo": "fastapi_template",
+    "changed": [
+     "backend/app/core/security.py"
+    ],
+    "predicted": {
+     "affected_modules": [
+      "backend/app/api/deps.py",
+      "backend/app/api/main.py",
+      "backend/app/api/routes/items.py",
+      "backend/app/api/routes/login.py",
+      "backend/app/api/routes/private.py",
+      "backend/app/api/routes/users.py",
+      "backend/app/api/routes/utils.py",
+      "backend/app/core/db.py",
+      "backend/app/crud.py",
+      "backend/app/initial_data.py",
+      "backend/app/main.py",
+      "backend/app/utils.py"
+     ],
+     "routes": [
+      "DELETE /{?settings.API_V1_STR}/items/{id}",
+      "DELETE /{?settings.API_V1_STR}/users/me",
+      "DELETE /{?settings.API_V1_STR}/users/{user_id}",
+      "GET /{?settings.API_V1_STR}/items/",
+      "GET /{?settings.API_V1_STR}/items/{id}",
+      "GET /{?settings.API_V1_STR}/users/",
+      "GET /{?settings.API_V1_STR}/users/me",
+      "GET /{?settings.API_V1_STR}/users/{user_id}",
+      "GET /{?settings.API_V1_STR}/utils/health-check/",
+      "PATCH /{?settings.API_V1_STR}/users/me",
+      "PATCH /{?settings.API_V1_STR}/users/me/password",
+      "PATCH /{?settings.API_V1_STR}/users/{user_id}",
+      "POST /{?settings.API_V1_STR}/items/",
+      "POST /{?settings.API_V1_STR}/login/access-token",
+      "POST /{?settings.API_V1_STR}/login/test-token",
+      "POST /{?settings.API_V1_STR}/password-recovery-html-content/{email}",
+      "POST /{?settings.API_V1_STR}/password-recovery/{email}",
+      "POST /{?settings.API_V1_STR}/private/users/",
+      "POST /{?settings.API_V1_STR}/reset-password/",
+      "POST /{?settings.API_V1_STR}/users/",
+      "POST /{?settings.API_V1_STR}/users/signup",
+      "POST /{?settings.API_V1_STR}/utils/test-email/",
+      "PUT /{?settings.API_V1_STR}/items/{id}"
+     ],
+     "tests": [
+      "backend/tests/api/routes/test_items.py",
+      "backend/tests/api/routes/test_login.py",
+      "backend/tests/api/routes/test_private.py",
+      "backend/tests/api/routes/test_users.py",
+      "backend/tests/conftest.py",
+      "backend/tests/crud/test_user.py",
+      "backend/tests/utils/item.py",
+      "backend/tests/utils/user.py"
+     ]
+    }
+   },
+   {
+    "id": "ft-i2",
+    "repo": "fastapi_template",
+    "changed": [
+     "backend/app/api/routes/items.py"
+    ],
+    "predicted": {
+     "affected_modules": [
+      "backend/app/api/main.py",
+      "backend/app/main.py"
+     ],
+     "routes": [
+      "DELETE /{?settings.API_V1_STR}/items/{id}",
+      "GET /{?settings.API_V1_STR}/items/",
+      "GET /{?settings.API_V1_STR}/items/{id}",
+      "POST /{?settings.API_V1_STR}/items/",
+      "PUT /{?settings.API_V1_STR}/items/{id}"
+     ],
+     "tests": [
+      "backend/tests/api/routes/test_items.py",
+      "backend/tests/conftest.py"
+     ]
+    }
+   }
+  ]
+ },
+ "failures": [],
+ "baseline_comparison": {
+  "baseline_run": "ab282dbf401f",
+  "tolerance": 0.0,
+  "rows": [
+   {
+    "metric": "graph.routes.precision",
+    "label": "Graph \u00b7 routes precision",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "graph.routes.recall",
+    "label": "Graph \u00b7 routes recall",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "graph.data_models.f1",
+    "label": "Graph \u00b7 data models F1",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "graph.orm_models.recall",
+    "label": "Graph \u00b7 ORM models recall",
+    "current": 1.0,
+    "baseline": 0.5,
+    "delta": 0.5,
+    "regressed": false
+   },
+   {
+    "metric": "graph.internal_imports.precision",
+    "label": "Graph \u00b7 import edges precision",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "graph.internal_imports.recall",
+    "label": "Graph \u00b7 import edges recall",
+    "current": 0.99,
+    "baseline": 0.9,
+    "delta": 0.09,
+    "regressed": false
+   },
+   {
+    "metric": "readiness.rule_level.precision",
+    "label": "Readiness \u00b7 rule precision",
+    "current": 1.0,
+    "baseline": 0.8824,
+    "delta": 0.1176,
+    "regressed": false
+   },
+   {
+    "metric": "readiness.rule_level.recall",
+    "label": "Readiness \u00b7 rule recall",
+    "current": 0.9412,
+    "baseline": 0.8824,
+    "delta": 0.0588,
+    "regressed": false
+   },
+   {
+    "metric": "readiness.rule_level.false_positive_rate",
+    "label": "Readiness \u00b7 rule false-positive rate",
+    "current": 0.0,
+    "baseline": 0.0377,
+    "delta": -0.0377,
+    "regressed": false
+   },
+   {
+    "metric": "readiness.location_level.precision",
+    "label": "Readiness \u00b7 location precision",
+    "current": 0.6667,
+    "baseline": 0.8571,
+    "delta": -0.1904,
+    "regressed": true
+   },
+   {
+    "metric": "readiness.location_level.recall",
+    "label": "Readiness \u00b7 location recall",
+    "current": 0.8889,
+    "baseline": 0.6667,
+    "delta": 0.2222,
+    "regressed": false
+   },
+   {
+    "metric": "impact.affected_modules.precision",
+    "label": "Impact \u00b7 affected modules precision",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "impact.affected_modules.recall",
+    "label": "Impact \u00b7 affected modules recall",
+    "current": 1.0,
+    "baseline": 0.9259,
+    "delta": 0.0741,
+    "regressed": false
+   },
+   {
+    "metric": "impact.routes.precision",
+    "label": "Impact \u00b7 routes precision",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "impact.routes.recall",
+    "label": "Impact \u00b7 routes recall",
+    "current": 1.0,
+    "baseline": 0.8684,
+    "delta": 0.1316,
+    "regressed": false
+   },
+   {
+    "metric": "impact.relevant_tests.precision",
+    "label": "Impact \u00b7 tests precision",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "impact.relevant_tests.recall",
+    "label": "Impact \u00b7 tests recall",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "retrieval.span_recall",
+    "label": "Retrieval \u00b7 evidence span recall",
+    "current": 0.6083,
+    "baseline": 0.55,
+    "delta": 0.0583,
+    "regressed": false
+   },
+   {
+    "metric": "retrieval.mrr",
+    "label": "Retrieval \u00b7 MRR",
+    "current": 0.3533,
+    "baseline": 0.3075,
+    "delta": 0.0458,
+    "regressed": false
+   },
+   {
+    "metric": "retrieval.hit@5",
+    "label": "Retrieval \u00b7 hit@5",
+    "current": 0.5,
+    "baseline": 0.45,
+    "delta": 0.05,
+    "regressed": false
+   },
+   {
+    "metric": "retrieval.snippet_precision",
+    "label": "Retrieval \u00b7 snippet precision",
+    "current": 0.1243,
+    "baseline": 0.1152,
+    "delta": 0.0091,
+    "regressed": false
+   },
+   {
+    "metric": "qa.structured_output_valid_rate",
+    "label": "Q&A \u00b7 structured output valid",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "qa.citation_validity",
+    "label": "Q&A \u00b7 citation validity (path/lines exist)",
+    "current": 1.0,
+    "baseline": 1.0,
+    "delta": 0.0,
+    "regressed": false
+   },
+   {
+    "metric": "qa.citation_support_precision",
+    "label": "Q&A \u00b7 citation faithfulness (cites labelled evidence)",
+    "current": 0.14,
+    "baseline": 0.1319,
+    "delta": 0.0081,
+    "regressed": false
+   },
+   {
+    "metric": "qa.citation_recall",
+    "label": "Q&A \u00b7 citation recall",
+    "current": 0.5116,
+    "baseline": 0.4634,
+    "delta": 0.0482,
+    "regressed": false
+   }
+  ]
+ },
+ "threshold_checks": [
+  {
+   "metric": "graph.routes.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "graph.routes.recall",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "graph.data_models.f1",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "graph.orm_models.recall",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "graph.internal_imports.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "graph.internal_imports.recall",
+   "min": 0.99,
+   "required": true,
+   "value": 0.99,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "readiness.rule_level.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "readiness.rule_level.recall",
+   "min": 0.94,
+   "required": true,
+   "value": 0.9412,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "readiness.rule_level.false_positive_rate",
+   "max": 0.0,
+   "required": true,
+   "value": 0.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "readiness.location_level.precision",
+   "min": 0.85,
+   "required": true,
+   "value": 0.6667,
+   "passed": false,
+   "status": "fail"
+  },
+  {
+   "metric": "readiness.location_level.recall",
+   "min": 0.88,
+   "required": true,
+   "value": 0.8889,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.affected_modules.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.affected_modules.recall",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.routes.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.routes.recall",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.relevant_tests.precision",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "impact.relevant_tests.recall",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "retrieval.span_recall",
+   "min": 0.6,
+   "required": true,
+   "value": 0.6083,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "retrieval.mrr",
+   "min": 0.35,
+   "required": true,
+   "value": 0.3533,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "retrieval.hit@5",
+   "min": 0.5,
+   "required": true,
+   "value": 0.5,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "qa.structured_output_valid_rate",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  },
+  {
+   "metric": "qa.citation_validity",
+   "min": 1.0,
+   "required": true,
+   "value": 1.0,
+   "passed": true,
+   "status": "pass"
+  }
+ ]
+}

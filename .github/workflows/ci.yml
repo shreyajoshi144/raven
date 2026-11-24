@@ -1,0 +1,47 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: raven, POSTGRES_PASSWORD: raven_dev_pw, POSTGRES_DB: raven_test }
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U raven" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      TEST_DATABASE_URL: postgresql://raven:raven_dev_pw@127.0.0.1:5432/raven_test
+      EVAL_DATABASE_URL: postgresql://raven:raven_dev_pw@127.0.0.1:5432/raven_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip, cache-dependency-path: backend/requirements-dev.txt }
+      - run: pip install -r backend/requirements-dev.txt
+      - run: ruff check backend/app backend/tests backend/evals
+        working-directory: .
+      - run: python -m pytest -q
+        working-directory: backend
+      - name: Evaluation smoke (hermetic, no LLM, no network; gates on evals/thresholds/smoke.json)
+        run: |
+          python -m evals validate
+          python -m evals run --suite smoke --repeats 2 --out eval-results
+        working-directory: backend
+      - name: Upload evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: eval-smoke, path: backend/eval-results, if-no-files-found: ignore }
+  frontend-and-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Syntax-check frontend modules
+        run: |
+          mkdir -p /tmp/jscheck
+          for f in frontend/js/*.js; do b=$(basename "$f" .js); cp "$f" "/tmp/jscheck/$b.mjs"; node --check "/tmp/jscheck/$b.mjs"; done
+      - name: Frontend unit tests
+        run: node --test frontend/tests/*.test.mjs
+      - name: Workflow JSON is generated and in sync
+        run: python3 automation/n8n/build_workflows.py && git diff --exit-code automation/n8n

@@ -1,0 +1,28 @@
+# secrets and local config
+.env
+.env.*
+!.env.example
+**/.env
+!**/.env.example
+*.pem
+*.key
+# data and backups
+*.dump
+*.sql
+*.db
+*.sqlite*
+backups/
+pgdata/
+# generated
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ruff_cache/
+.pytest_cache/
+node_modules/
+web/dist/
+backend/eval-results/
+*.zip
+.idea/
+.DS_Store
