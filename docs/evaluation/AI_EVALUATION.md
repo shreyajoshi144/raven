@@ -1,6 +1,6 @@
 # Raven — AI evaluation framework
 
-> Related: [Evaluation & Results](EVALUATION_AND_RESULTS.md) · [latest committed run](results/2026-11-01-smoke-after-auth-fix/report.md) · [benchmark card](../../backend/evals/benchmarks/v1/README.md)
+> Related: [Evaluation & Results](EVALUATION_AND_RESULTS.md) · [latest committed run](results/2026-11-25-smoke-current/report.md) · [benchmark card](../../backend/evals/benchmarks/v1/README.md)
 
 The harness (`backend/evals`, run as `python -m evals`) scores Raven's **real production code paths** against a **versioned, hand-labelled benchmark**:
 
@@ -163,7 +163,8 @@ If anything the judge needs is missing, the run continues with deterministic met
 All runs: smoke suite, 3 repeats, **retrieval-only system under test (no LLM)**, benchmark v1 fingerprint `774e9bbd2a2b9fb5` (labels unchanged throughout).
 - **Baseline:** run `ab282dbf401f`, 2026-10-26 ([report](results/2026-10-26-smoke-retrieval-only/report.md)). 22/22 gates.
 - **Fixes 1–4:** run `ef5411364870`, 2026-10-27 ([report](results/2026-10-27-smoke-after-defect-fixes/report.md)). 21/22 gates: fixing the parser exposed defect 5.
-- **Fix 5 (current):** run `50744a933fd3`, 2026-11-01 ([report](results/2026-11-01-smoke-after-auth-fix/report.md), [results.json](results/2026-11-01-smoke-after-auth-fix/results.json)). **22/22 gates under the raised floors.**
+- **Fix 5:** run `50744a933fd3`, 2026-11-01 ([report](results/2026-11-01-smoke-after-auth-fix/report.md), [results.json](results/2026-11-01-smoke-after-auth-fix/results.json)). **22/22 gates under the raised floors.**
+- **Re-run (current):** run `27e096d5db28`, 2026-11-25 ([report](results/2026-11-25-smoke-current/report.md), [results.json](results/2026-11-25-smoke-current/results.json)). **22/22 gates; every score in the table below is unchanged** (the suite is deterministic).
 
 | Metric (n) | Baseline | Fixes 1–4 | Current |
 |---|---:|---:|---:|
@@ -191,7 +192,7 @@ Per repository (current), retrieval span recall / MRR / hit@5 is:
 
 From fixes 1–4 to now, one question changed (ft-q7): its evidence moved into the top 5. This is consistent with the graph now recording route→dependency edges for alias-based auth (37 `uses_dependency` edges on the real repo, 6 on the original code), which retrieval follows as neighbours.
 
-Latency (local, macOS arm64, current): ingest+parse+graph mean 0.15 s, p50 0.08 s, max 0.32 s (9 analyses); retrieval mean 0.018 s (81); impact mean 0.004 s (15); 0 model calls, 0 tokens, $0.
+Latency (local, macOS arm64, 2026-11-01 run): ingest+parse+graph mean 0.15 s, p50 0.08 s, max 0.32 s (9 analyses); retrieval mean 0.018 s (81); impact mean 0.004 s (15); 0 model calls, 0 tokens, $0.
 
 **Not measured (no live model or judge run has been executed):** AI answer correctness, key-fact recall, abstention, false abstention, confidence calibration, judge correctness/faithfulness/relevancy, token usage and cost of real answering. The live path is implemented, and its failure modes (missing credentials, missing DeepEval, unsupported provider) are tested. DeepEval's real metric classes were run through the adapter with a scripted judge model, which verifies the wiring only.
 

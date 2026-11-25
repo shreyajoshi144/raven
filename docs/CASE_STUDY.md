@@ -22,7 +22,7 @@ Trust was the product, so I cut anything that would let an unverifiable claim in
 ## How I measured quality
 Quality is judged by a versioned benchmark of **3 hand-labelled repositories** with a stored baseline and pass/fail gates, run with no model and no network so results are repeatable.
 
-| What | Score (run 2026-11-23) | Labelled items |
+| What | Score (run 2026-11-25) | Labelled items |
 |---|---|---|
 | Routes found | precision 1.00, recall 1.00 | 30 |
 | Import edges | precision 1.00, recall 0.99 | 100 |
@@ -31,9 +31,9 @@ Quality is judged by a versioned benchmark of **3 hand-labelled repositories** w
 | Citations that point to real code | 1.00 | 24 |
 | Retrieval, correct evidence in top 5 | 0.55 (baseline 0.45) | 20 |
 
-The benchmark caught real defects: newer Python syntax silently dropping whole files, and non-deterministic retrieval. Both were fixed and now have regression tests. Alongside it sit 483 automated tests on a real PostgreSQL.
+The benchmark caught real defects: newer Python syntax silently dropping whole files, and non-deterministic retrieval. Both were fixed and now have regression tests. Alongside it sit 490 automated tests on a real PostgreSQL.
 
 **Not measured:** AI answer quality with a live model. The evaluated system is the retrieval-only path. Retrieval is the weakest number (hit@5 0.55) and the next thing I would improve.
 
 ## What I would do next
-Measure the answers with a live model and a judge, add an eval gate to CI, and interview five developers to test the core claim.
+Measure the answers with a live model and a judge (the opt-in `eval-live` workflow exists and needs API keys), get the CI evaluation gate (already defined in `ci.yml`) to a recorded green run, and interview five developers to test the core claim.

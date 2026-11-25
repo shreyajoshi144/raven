@@ -45,3 +45,5 @@ jobs:
         run: node --test frontend/tests/*.test.mjs
       - name: Workflow JSON is generated and in sync
         run: python3 automation/n8n/build_workflows.py && git diff --exit-code automation/n8n
+      - name: Documentation is consistent (links, names, numbers, requirement IDs)
+        run: python3 scripts/check_docs.py

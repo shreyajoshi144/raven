@@ -47,7 +47,10 @@ Retrieval (exact symbol/path/route match, Postgres full-text search, 1-hop graph
 ## Data lifecycle
 Deleting an analysis cascades to files, graph, docs, chat, workflow runs, tasks and receipts. Retrieved Q&A evidence is cleared once an answer is stored. Stored source text is limited to Python and a short allow-list of setup files, redacted.
 
+## Operations layer
+Admin API and console, per-user quotas and rate limits, the answer and embedding caches, HTTP metrics and the Prometheus endpoint are described in [ADMIN_AND_OPERATIONS.md](ADMIN_AND_OPERATIONS.md). The architecture-first **Map** (`GET /analyses/{id}/map`) groups files into plain-language areas (Frontend, API & routes, Business logic, Data & models, Background jobs, Config, Shared code, Scripts & tooling, Tests, External packages) before showing files.
+
 ## Flow views (frontend)
 * `GET /analyses/{id}/graph/flow` — file-level map: symbol edges are **lifted** to the files containing them and aggregated per file pair; each connection keeps its relation kinds, evidence lines and a resolution (`verified_static` only if every underlying edge is). Files get a role (entry / routes / services / data models / workers / config / module) and external packages are added as dashed nodes. `focus=<folder or file>` returns that scope plus up to 20 context neighbours; tests are hidden unless requested.
 * `GET /analyses/{id}/graph/trace?node_id=` — symbol-level subgraph (depth ≤ 4, ≤ 60 nodes) from a route/function: *handled by* (route → handler), calls, dependencies, models, workers and configuration.
-* `frontend/js/flow.js` renders both: longest-path layering with cycle breaking, barycenter ordering, bezier edges, animated "packets" along highlighted paths, pan/zoom/pinch, minimap, focus mode, arrow-key traversal.
+* `frontend/js/flow.js` renders both (the "Detailed file graph"; the default view is the Map). Scrolling pans the canvas; zoom is ⌘/Ctrl + scroll, pinch or the +/- buttons: longest-path layering with cycle breaking, barycenter ordering, bezier edges, animated "packets" along highlighted paths, pan/zoom/pinch, minimap, focus mode, arrow-key traversal.

@@ -11,12 +11,14 @@ Raven analyzes a **public GitHub repository at a pinned commit** with static ana
 
 | Capability | What the user gets | How trust is communicated |
 |---|---|---|
-| **Codebase intelligence** | Architecture graph ("Map") of files, routes, models, services, workers and packages; per-route trace; source viewer; a 16-section onboarding guide | Every edge is `verified_static` (proven by syntax), `inferred` (heuristic) or `unresolved` (target unknown), with evidence lines |
+| **Interactive Map** | The architecture first (Frontend, API & routes, Business logic, Data & models, Background jobs, Config, Shared code, Scripts & tooling, Tests, External packages); click a block to see its groups, then its files and what each depends on. The all-files graph is kept as the "Detailed file graph" | Every edge is `verified_static` (proven by syntax), `inferred` (heuristic) or `unresolved` (target unknown), with evidence lines |
+| **Codebase intelligence** | Per-route trace; source viewer; a 16-section onboarding guide; architecture snapshots and drift between commits | Every edge is `verified_static` (proven by syntax), `inferred` (heuristic) or `unresolved` (target unknown), with evidence lines |
 | **Engineering-readiness assessment** | Findings on testing, error handling, security, configuration, logging and maintainability, each with a recommendation and "how to verify" | Separate **severity** and **confidence**; finding *kind* (`observed`, `potential_risk`, `absence`, `coverage_gap`, `metric`); security findings are never labelled "confirmed" |
 | **Source-grounded Q&A** | Answers to questions about the code, with clickable citations | Citations are validated against the retrieved evidence; a **confidence** label (a rule, not a probability); claims beyond the code are listed separately as **inferred**; without an LLM it falls back to **retrieval-only** source locations |
+| **Pull-request review** | A plain-language review priority (Review closely / Worth a careful read / Looks routine) with reasons, what the PR does, changes grouped by architecture area, things to check, and what else it could affect | Each finding says why it matters and is labelled *proven from the code* or *best guess*; Raven says it reads structure, not logic, and posts nothing to GitHub |
 | **Change-impact analysis** | For a base commit/branch vs. the analyzed commit: changed files, dependent modules, affected routes, potentially relevant tests, frontend callers | Each link carries its resolution; tests are "potentially relevant", explicitly not a regression set |
 
-![Analysis overview](../images/react-03-overview.png)
+![Architecture map](../images/map-01-architecture.png)
 
 ## 3. Users and core journey
 ```mermaid
@@ -69,6 +71,17 @@ flowchart LR
 - Default base is the analyzed commit's first parent; any branch, tag or SHA can be entered (strict ref validation, rate-limited).
 - Reverse-import closure to depth 3, route handlers in affected files, tests linked by import or naming convention, frontend callers of affected routes, a change-neighbourhood graph, and a history of the last 20 comparisons.
 
+### Interactive Map
+- Level 1: the project's areas with arrows showing which depend on which; level 2: the groups inside an area; level 3: the files in a group, with a side panel listing what a file depends on, what uses it, its endpoints and how many test files exercise it.
+- Areas are assigned from analyser roles and folder/file names (heuristic, see [LIMITATIONS](../LIMITATIONS.md)). Scrolling moves the detailed graph; zoom is ⌘/Ctrl + scroll or pinch.
+
+### Pull-request review
+- Paste a same-repository pull-request URL. Raven analyses the base and head commits and compares them (architecture drift, new readiness findings, untested changed modules).
+- The verdict is a *review priority*, not a bug score: it is "Review closely" only for changes that commonly break other code (removed routes, removed functions that other code still mentions, changed parameters, new serious findings). Removed or renamed tests never count as breaking API.
+
+### Operations (administrators)
+Role-based admin console (users, analyses, failed jobs, LLM spend, audit log, abuse switch), per-user daily quotas and per-route rate limits, answer and embedding caches, and a monitoring dashboard with a Prometheus endpoint. See [ADMIN_AND_OPERATIONS](../ADMIN_AND_OPERATIONS.md).
+
 ### Accounts (public sign-up readiness)
 Email verification (enforceable), password reset by single-use emailed link (revokes all sessions), TOTP two-factor with hashed single-use recovery codes. Real SMTP delivery has not been tested.
 
@@ -80,7 +93,7 @@ Docker Compose with optional profiles: Caddy HTTPS proxy, daily backup with hous
 - **Not in scope:** running code or tests, vulnerability scanning against CVE databases, private repositories, general "AI accuracy" claims. Benchmark-scoped scores for the graph, readiness, impact and retrieval are in [AI_EVALUATION.md](../evaluation/AI_EVALUATION.md); AI-answer quality has not been measured yet.
 
 ## 6. Roadmap
-Planned order (see [Sprints](../sprints/SPRINTS.md)): live-model evaluation with a judge and AI-quality floors → CI executed on GitHub → public HTTPS deployment → prompt-injection test set → OpenTelemetry and metrics → GitHub App (private repositories, PR comments) → SSO and organisations.
+The prioritised plan is in [Roadmap](../project/03-ROADMAP.md) and the backlog in [Product backlog](../project/05-PRODUCT-BACKLOG.md). Requirements and acceptance criteria are in the [PRD](../project/02-PRD.md).
 
 ## 7. Status
-MVP. Verified end-to-end on a local Docker Compose stack with real n8n; the LLM path has only been exercised against fakes. See the [Evaluation & Results Report](../evaluation/EVALUATION_AND_RESULTS.md) for exactly what was and was not verified, and [Future improvements](../evaluation/EVALUATION_AND_RESULTS.md#7-future-improvements).
+Feature-complete for the scope in the PRD and verified on a local Docker Compose stack with real n8n (490 backend tests, 22 of 22 benchmark gates). Not done: a live model answer (no LLM credit), a public deployment, real email delivery and a green GitHub Actions run. The exact list is in the [QA report](../project/08-QA-REPORT.md) and the [project closure report](../project/11-PROJECT-CLOSURE-REPORT.md).

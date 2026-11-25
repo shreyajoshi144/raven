@@ -4,17 +4,16 @@ Raven analyzes a **public GitHub Python/FastAPI repository at a pinned commit** 
 
 ![Raven architecture map](docs/images/map-01-architecture.png)
 
-**Stack:** React 18 (JSX) + Vite + plain CSS (the proven Map graph engine is reused from `frontend/js`) · FastAPI · PostgreSQL 16 (state **and** work queue) · SQLAlchemy/Alembic · Python worker · n8n (orchestration) · Anthropic API (optional) · Docker Compose
+**Stack:** React 18 (JSX) + Vite + plain CSS (the proven Map graph engine is reused from `frontend/js`) · FastAPI · PostgreSQL 16 (state **and** work queue) · SQLAlchemy/Alembic · Python worker · n8n (orchestration) · LLM provider, Anthropic or OpenAI-compatible (optional) · Docker Compose
 
-| | Verified in the latest pass ([details](docs/evaluation/EVALUATION_AND_RESULTS.md)) |
+| | Verified in the latest pass, 2026-11-25 ([QA report](docs/project/08-QA-REPORT.md), [details](docs/evaluation/EVALUATION_AND_RESULTS.md)) |
 |---|---|
-| Backend tests | **483 passed, 1 skipped** (pytest, real PostgreSQL; run 2026-11-23) |
-| Frontend | React app built in Docker and served by the API; light workspace, Map node graph (pan, zoom, fit, minimap), admin console; **6 web + 9 legacy unit tests passed**. The earlier Playwright run predates the redesign and was not repeated |
-| Benchmark evaluation | graph routes P/R 1.000/1.000 · import edges P/R 1.000/0.990 · ORM recall 1.000 · readiness rule P/R 1.000/0.941, location P/R 1.000/0.944 · impact modules/routes recall 1.000/1.000 · citation validity 1.000 · retrieval span recall 0.608, hit@5 0.55 — 3 hand-labelled repos, retrieval-only, all gates passed (re-run 2026-11-23) ([details](docs/evaluation/AI_EVALUATION.md)) |
-| Frontend tests | **9 passed** (`node --test`, no dependencies) |
+| Backend tests | **490 passed, 1 skipped** (pytest, real PostgreSQL; run 2026-11-25) |
+| Frontend | React app built in Docker and served by the API; light workspace, Map node graph (pan, zoom, fit, minimap), admin console; **6 web + 9 legacy unit tests passed** (`npm test`, `node --test`). The earlier Playwright run predates the redesign and was not repeated |
+| Benchmark evaluation | graph routes P/R 1.000/1.000 · import edges P/R 1.000/0.990 · ORM recall 1.000 · readiness rule P/R 1.000/0.941, location P/R 1.000/0.944 · impact modules/routes recall 1.000/1.000 · citation validity 1.000 · retrieval span recall 0.608, hit@5 0.55 — 3 hand-labelled repos, retrieval-only, all gates passed (re-run 2026-11-25) ([details](docs/evaluation/AI_EVALUATION.md)) |
 | Full stack | Docker Compose up, all health checks 200, **3 workflows active in real n8n 2.43.4** |
 | End to end | `fastapi/full-stack-fastapi-template` analyzed to READY in 11.3 s (711 nodes, 1,603 edges, 23 routes) |
-| Not yet verified | AI-answer quality and live LLM calls (no API key used), GitHub Actions CI, a real HTTPS domain, real SMTP delivery, load |
+| Not yet verified | A live model answer and AI-answer quality (the LLM account has no credit), a green GitHub Actions run (the first run failed on lint and was fixed in `1021a57`), a public HTTPS deployment, real SMTP delivery, load |
 
 ## Features
 - **Operations (admin console)** — role-based admin screen: users, analyses, failed jobs, LLM spend, audit log and a one-click abuse switch; per-user daily quotas (analyses, questions, tokens, spend) and per-route rate limits; commit-keyed answer cache and question-embedding cache; monitoring dashboard (latency percentiles, error rate, queue and AI health) and a Prometheus endpoint. See [Administration & operations](docs/ADMIN_AND_OPERATIONS.md).
@@ -110,12 +109,15 @@ cd backend && TEST_DATABASE_URL=postgresql://user:pass@localhost/raven_test pyth
 ruff check backend/app backend/tests backend/evals
 node --test frontend/tests/*.test.mjs
 (cd web && npm test)                                   # React shell checks: routing, @legacy imports, API endpoints exist, no raw HTML
+python3 scripts/check_docs.py                          # documentation consistency: links, names, numbers, requirement IDs
 python automation/n8n/build_workflows.py && git diff --exit-code automation/n8n                  # workflows in sync
 cd backend && EVAL_DATABASE_URL=postgresql://user:pass@localhost/raven_eval python -m evals run --suite smoke   # benchmark evaluation (no LLM, no network); see docs/evaluation/AI_EVALUATION.md
 bash e2e/up.sh && python3 e2e/browser_ui_basic.py && python3 e2e/browser_full_flow.py           # Playwright suite (Linux paths; not re-run in the latest pass)
 ```
 
 ## Documentation
+Project-management documents (charter, PRD, roadmap, milestones, backlog, risk register, decision log, QA report, traceability, release readiness, closure report) are in **[docs/project/](docs/project/README.md)**. Product and engineering documents:
+
 | Document | Purpose |
 |---|---|
 | [Product](docs/product/PRODUCT.md) | problem, capabilities, user journey, scope |
@@ -143,6 +145,6 @@ e2e/  scripts/  docker-compose.yml  .env.example
 ```
 
 ## Limitations
-Static analysis only (dynamic imports, DI and runtime-generated routes can be missed) · Python/FastAPI and public GitHub repositories only · parser runs on Python 3.12 · best-effort secret redaction · lexical retrieval · no email verification/password reset/MFA. Full list: [LIMITATIONS.md](docs/LIMITATIONS.md).
+Static analysis only (dynamic imports, DI and runtime-generated routes can be missed) · Python/FastAPI and public GitHub repositories only · parser runs on Python 3.12 · best-effort secret redaction · lexical retrieval by default (semantic is optional and unmeasured) · no successful live AI answer verified · real email delivery untested · no hosted deployment. Full list: [LIMITATIONS.md](docs/LIMITATIONS.md).
 
 Third-party assets (Mermaid, Inter, JetBrains Mono) and their licenses: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The repository does not include a license file for Raven itself.

@@ -1,5 +1,7 @@
 # Testing — what ran, and what did not
 
+> **This is the chronological log of the early passes (2026-10 to 2026-11-01); its test counts are historical.** The current results are in the [QA report](project/08-QA-REPORT.md) and the [testing log](testing/TESTING_LOG.md). Pre-redesign screen names ("Atlas") in the raw output below were later renamed "Map".
+
 All numbers below are from actual runs in the build environment (Python 3.12, PostgreSQL 16.15, Node 24, headless Chromium via Playwright).
 
 ## 1. Backend (pytest, real PostgreSQL, schema created by Alembic)

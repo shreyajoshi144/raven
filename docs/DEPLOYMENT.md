@@ -11,6 +11,9 @@ curl -s localhost:8000/health/ready  # {"status":"ready",...}
 ```
 Open http://localhost:8000 (the React app; the previous UI remains at /legacy). Compose runs with `APP_ENV=production`, which rejects `COOKIE_SECURE=false`; Chrome accepts secure cookies on `http://localhost` (verified), and any other host must be served over HTTPS.
 
+## Build check
+A from-scratch image build (`docker build -f infra/Dockerfile .`) succeeded on 2026-11-25 (exit 0). Earlier builds failed because Docker could not download Python packages from PyPI; the currently running local stack was assembled by layering new code onto an earlier image, so it has not itself been rebuilt from scratch.
+
 ## After the first start
 Promote your account to administrator and set usage limits: see [ADMIN_AND_OPERATIONS.md](ADMIN_AND_OPERATIONS.md). Take a `pg_dump` before upgrading: migrations 0007 and 0008 add columns and tables only. Settings for quotas and caching are in [CONFIGURATION.md](CONFIGURATION.md).
 

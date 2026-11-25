@@ -1,13 +1,21 @@
 # Changelog
 
-## Unreleased — Map and plain-language pull requests (2026-11)
+Sprint labels (S8–S16) match [docs/sprints/SPRINTS.md](docs/sprints/SPRINTS.md). Entries are newest first.
+
+## S16 — Repository, CI and project-management pack (2026-11-25)
+- Repository connected to GitHub; earlier prototype files replaced (history kept).
+- Fixed the CI lint failure (shared `ready` fixture moved to `conftest.py`); backend tests 490 passed, 1 skipped.
+- Added the project-management pack in `docs/project/` and `scripts/check_docs.py`, which checks links, naming and key numbers across the documentation.
+- Reconciled the existing documents with the current product.
+
+## S15 — Map and plain-language pull requests (2026-11-24)
 - **Map** (replaces the first view of the old graph): architecture first (Frontend, API & routes, Business logic, Data & models, Background jobs, Config, Shared code, Scripts & tooling, Tests, External packages), then the groups inside an area, then the files with what each depends on and what uses it. `GET /api/v1/analyses/{id}/map`. The old all-files graph is kept as "Detailed file graph".
 - **Canvas navigation**: scroll now moves the canvas; zoom is ⌘/Ctrl + scroll, a trackpad pinch or the +/- buttons. Connection labels only show when few connections are visible.
 - **Pull-request review** rewritten for first-time users: review priority with plain reasons, what the PR does, changes grouped by architecture area, "Things to check" with why each matters and whether it is proven or a guess, what else it could affect. Old reviews upgrade themselves on first open.
 - **Fewer false alarms**: removed or renamed tests are no longer "breaking public API"; a removed function is only high priority when other code still mentions it; new import cycles are medium.
 - "Atlas" is no longer used in the product, docs or URLs (`#/a/{id}/atlas` still redirects to the Map).
 
-## Unreleased — Operations and launch hardening (2026-11)
+## S13 — Operations and launch hardening (2026-11-07)
 - **Admin**: `users.role`, `disabled_at`/`disabled_reason`, per-user quota overrides, `admin_events` audit table (migration 0007). `/api/v1/admin/{overview,users,analyses,failures,spend,audit,monitoring}`, disable/enable and quota endpoints, `python -m app.admin_cli grant|revoke`, Admin screen. Disabled accounts cannot sign in; sessions are revoked.
 - **Quotas and rate limits**: daily analyses/questions/tokens/spend per user (`DAILY_*`), per-route read/write limits on all session routes (`RL_*`); `QUOTA_EXCEEDED` and `ACCOUNT_DISABLED` error codes.
 - **Caching**: commit-keyed answer cache and question-embedding cache, `chat_messages.cache_hit` (migration 0008), hit-rate and savings on the Overview tab, `ANSWER_CACHE_*` settings.
@@ -15,15 +23,15 @@
 - **Security headers**: added `Cross-Origin-Resource-Policy`, `X-Permitted-Cross-Domain-Policies`, `frame-src/worker-src/manifest-src` CSP directives and a stricter Permissions-Policy.
 - **UI**: light redesign (landing, simple auth, route-focused Map workspace).
 - **Fix**: idempotency receipts are now namespaced by analysis id (a reused n8n execution id replayed another analysis's receipt and stalled dispatch).
-- Backend tests: 483 passed, 1 skipped.
+- Backend tests: 483 passed, 1 skipped at the end of S13.
 
-## Unreleased — Sprint 3 (PR intelligence and evaluation)
+## S10 — PR intelligence and evaluation (2026-11-03)
 - `POST/GET /api/v1/pr-reviews[/{id}[/markdown]]`, Pull requests page, `GET /analyses/{id}/usage`, `python -m evals pr`. Migration 0006; optional `LLM_PRICE_*`.
 
-## Unreleased — Sprint 2 (architecture intelligence)
+## S9 — Architecture intelligence (2026-11-03)
 - Architecture snapshot, drift (new deps, cycles, boundary violations, coupling, complexity, breaking changes), history and predicted impact: `GET /analyses/{id}/architecture[/history|/drift]`, new Architecture tab. No migration.
 
-## Unreleased — Sprint 1 (intelligence foundation)
+## S8 — Intelligence foundation (2026-11-02)
 - Retrieval channels (`lexical`/`semantic`/`graph`) with `symbol` and `commit_sha` provenance; `commit_sha` on answers, citations and findings (migration 0005).
 - Incremental indexing against the owner's previous analysis (added/modified/deleted/renamed diff, parse and embedding reuse); `POST /analyses/{id}/reindex` for full rebuild.
 - Tenant-isolation, failure-consistency and no-LLM tests. See docs/sprints/UPGRADE_PLAN.md.

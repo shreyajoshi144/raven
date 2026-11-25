@@ -1,4 +1,6 @@
-# Three-sprint upgrade: plan and Sprint 1 evidence
+# Three-sprint upgrade (S8–S10): plan and evidence
+
+> Numbering: this upgrade was planned as "Sprint 1–3"; in the delivery history ([SPRINTS.md](SPRINTS.md)) they are **S8, S9 and S10**.
 
 ## Audit (what already existed)
 | Area | Already in the repo | Gap for this upgrade |
@@ -11,14 +13,14 @@
 | Degradation | retrieval-only answers, non-fatal embeddings | not tested end to end without LLM + embeddings |
 
 ## Plan
-- **Sprint 1 — Intelligence foundation (done, below).**
-- **Sprint 2 — Architecture intelligence (not started):** snapshot per analysis (modules, import edges, complexity per file), drift between two commits of one repository (new/removed dependencies, import cycles, coupling, layer-boundary violations, complexity growth), history timeline, predictive impact from the existing impact engine extended to routes/tests/breaking changes. Reuses `analysis_files.facts`, `code_edges`, and `incremental.diff_files`.
-- **Sprint 3 — PR intelligence and evaluation (not started):** GitHub PR fetch (compare API already used by impact), risky-change/missing-test/boundary rules over the Sprint 2 drift, evidence-cited review comments, benchmark extension and cost/latency tracking on the existing `backend/evals` harness.
+- **S8 (planned Sprint 1) — Intelligence foundation (done, below).**
+- **S9 (planned Sprint 2) — Architecture intelligence (done):** snapshot per analysis (modules, import edges, complexity per file), drift between two commits of one repository (new/removed dependencies, import cycles, coupling, layer-boundary violations, complexity growth), history timeline, predictive impact from the existing impact engine extended to routes/tests/breaking changes. Reuses `analysis_files.facts`, `code_edges`, and `incremental.diff_files`.
+- **S10 (planned Sprint 3) — PR intelligence and evaluation (done):** GitHub PR fetch (compare API already used by impact), risky-change/missing-test/boundary rules over the Sprint 2 drift, evidence-cited review comments, benchmark extension and cost/latency tracking on the existing `backend/evals` harness.
 
 Each sprint waits for approval.
 
-## Sprint 1 — what changed
-| Criterion | Implementation | Evidence (test in `backend/tests/test_sprint1.py` unless noted) |
+## S8 — what changed
+| Criterion | Implementation | Evidence (test in `backend/tests/test_sprint1.py` (the S8 tests) unless noted) |
 |---|---|---|
 | Hybrid retrieval, independent channels | `retrieve(..., channels={"lexical","semantic","graph"})`; each evidence item has `channel`, `symbol`, `commit_sha`, path, lines | `test_retrieval_channels_work_independently_and_carry_provenance`; semantic/lexical fallback: `test_embeddings_retrieval.py` |
 | Evidence graph without duplicates | unchanged builder; unique constraints; rebuilt from all facts on every run | `test_incremental_indexing_across_commits` (distinct keys == rows; incremental graph == from-scratch graph), `test_repeated_submission_creates_no_duplicates` |
@@ -44,7 +46,7 @@ Each sprint waits for approval.
 
 ---
 
-## Sprint 2 — Architecture intelligence (implemented)
+## S9 — Architecture intelligence (implemented)
 No schema change and no new configuration: snapshots are computed on demand from each analysis's stored graph and facts, so every past analysis already has history.
 
 | Requirement | Implementation (`backend/app/services/architecture.py`) | Evidence (`backend/tests/test_architecture.py`) |
@@ -71,13 +73,13 @@ Thresholds (constants at the top of the module): coupling = +3 internal imports 
 
 ---
 
-## Sprint 3 — PR intelligence and evaluation (implemented)
+## S10 — PR intelligence and evaluation (implemented)
 Schema: migration `0006` adds `pr_reviews` and `chat_messages.input_tokens / output_tokens / latency_ms` (nullable; nothing deleted). Configuration: optional `LLM_PRICE_INPUT_PER_MTOK`, `LLM_PRICE_OUTPUT_PER_MTOK`.
 
 | Requirement | Implementation | Evidence |
 |---|---|---|
 | GitHub PR integration | `POST /api/v1/pr-reviews {url}` (strict `…/pull/<n>` URL) reads the PR's base/head commits, analyses both (reusing existing analyses and incremental indexing), `GET /pr-reviews/{id}` computes the review once both are READY; `/markdown`, list; fork PRs refused | `tests/test_pr_review.py` (end-to-end, idempotency, fork/unknown/failed, URL strictness) |
-| Risky changes, missing tests, architectural violations | drift findings (Sprint 2) + new readiness findings in changed files + sensitive-path changes (inferred) + changed modules with no importing/name-matched test | `test_pr_review_end_to_end_with_evidence`, `test_clean_pr_has_no_findings` |
+| Risky changes, missing tests, architectural violations | drift findings (S9) + new readiness findings in changed files + sensitive-path changes (inferred) + changed modules with no importing/name-matched test | `test_pr_review_end_to_end_with_evidence`, `test_clean_pr_has_no_findings` |
 | Evidence-backed review comments | one templated comment per finding, with path, line, side (base/head), commit and verified/inferred label; asserted to cite existing files/lines. Not posted to GitHub | same + markdown view |
 | Real-codebase benchmark | `python -m evals pr`: 7 labelled scenarios, 5 of them mutations of the vendored real `fastapi/full-stack-fastapi-template` backend. Scores expected-finding recall, forbidden findings, evidence validity, reproducibility | run below; `tests/test_evals_pr.py` (harness can fail) |
 | Q&A quality metrics | already in the v1 benchmark (27 questions): correctness, citation precision/recall, evidence coverage, unsupported claims, retrieval relevance, abstention; unchanged | `docs/evaluation/AI_EVALUATION.md` |

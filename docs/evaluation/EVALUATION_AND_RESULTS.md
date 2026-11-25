@@ -3,50 +3,58 @@
 > Related: [Product](../product/PRODUCT.md) · [Architecture & Workflows](../architecture/ARCHITECTURE_AND_WORKFLOWS.md) · detailed logs: [TESTING.md](../TESTING.md), [LIMITATIONS.md](../LIMITATIONS.md)
 
 **How to read this report.** Every result is labelled:
-- ✅ **Verified** — executed in the latest pass (2026-10-26), output observed.
+- ✅ **Verified** — executed in the latest pass (2026-11-25), output observed.
 - 📄 **Reported** — recorded in an earlier development pass ([TESTING.md](../TESTING.md) §1–3), not re-run in the latest pass.
 - ⬜ **Not verified** — implemented but never exercised against the real dependency.
 
 Benchmark scores (precision/recall against hand-labelled ground truth) now exist for the graph, readiness findings, change impact, retrieval and the retrieval-only Q&A fallback; see §2b and [AI_EVALUATION.md](AI_EVALUATION.md). **No AI-answer accuracy figure exists**: the live-model path and the LLM judge have not been run, and none is claimed.
 
-## 1. Environment (latest pass)
-macOS (arm64) · Docker 29.7.2 · Python 3.12 · PostgreSQL 16 (container) · Node 26 · Google Chrome (headless, for screenshots) · n8n 2.43.4 · **no LLM API key** · **no GitHub token** (unauthenticated, 60 requests/hour).
+## 1. Environment (latest pass, 2026-11-25)
+macOS (arm64) · Docker Desktop · Python 3.13 for the test and evaluation runs (the runtime image uses Python 3.12) · PostgreSQL 16 (container) · n8n 2.43.4 · an OpenAI-compatible LLM endpoint is configured but the account has **no credit**, so no live model answer was produced · a GitHub token is configured for the local stack.
 
 ## 2. Automated tests — ✅ Verified
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest, real PostgreSQL, schema via Alembic) | `cd backend && TEST_DATABASE_URL=… python -m pytest -q` | **428 passed, 1 skipped** (the DeepEval-only test) |
-| Same suite in the optional DeepEval virtualenv | `.venv-eval/bin/python -m pytest -q` | **429 passed** (includes the DeepEval integration test) |
-| Lint | `ruff check backend/app backend/tests backend/evals` | All checks passed |
+| Backend (pytest, real PostgreSQL, schema via Alembic) | `cd backend && TEST_DATABASE_URL=… python -m pytest -q` | **490 passed, 1 skipped** (the opt-in DeepEval test) |
+| Same suite in the optional DeepEval virtualenv | `.venv-eval/bin/python -m pytest -q` | 📄 not re-run since 2026-11-01 |
+| Lint | `ruff check backend/app backend/tests backend/evals` | All checks passed (ruff 0.17.6) |
 | Frontend unit tests (no dependencies) | `node --test frontend/tests/*.test.mjs` | **9 passed** |
+| React shell checks | `cd web && npm test` · `npm run build` | **6 passed** · build OK |
 | Frontend syntax | `node --check` on every `frontend/js/*.js` module | all pass |
 | Workflow generation | `python automation/n8n/build_workflows.py` then `git diff` | no diff; all 3 JSON files parse |
 
-Backend tests by area (counted with `pytest --collect-only`):
+Backend tests by area (counted with `pytest --collect-only`, 2026-11-25; the file-level map is in [testing/TESTING_LOG.md](../testing/TESTING_LOG.md)):
 
 | Area | Tests | Covers |
 |---|---:|---|
-| Internal/n8n contract | 90 | idempotent dispatch, duplicate callbacks, 9×9 state-transition matrix, malformed payloads, concurrent dispatch |
+| Internal/n8n contract | 91 | idempotent dispatch, duplicate callbacks, 9×9 state-transition matrix, malformed payloads, concurrent dispatch, receipt keys reused across analyses |
 | URL validation | 37 | canonicalization, look-alike hosts, encoding tricks, homoglyphs, traversal |
-| Change impact | 24 | default parent base, explicit refs, hostile refs rejected before any GitHub call, isolation, rate limit, truncated/malformed compare |
+| Evaluation harness | 27 | metric maths, benchmark integrity, judge timeout/retry, thresholds/baselines, smoke regression |
 | Frontend-file analysis + web parsing | 30 | API-call linking (never "verified"), minified exclusion, redaction |
-| UI contracts (new) | 19 | fields read by Health/Impact/Ask, filter AND-semantics, evidence/impact links resolve to stored files, confidence/inferred, retrieval-only fallback, CSRF, ownership |
-| Security API | 17 | Argon2id, cookie flags, session revocation, CSRF, rate limits, headers/CSP, body cap, internal auth |
-| Q&A + confidence | 19 | retrieval bounds, citation validation, hallucinated/out-of-range citations rejected, LLM failures → retrieval-only, prompt-injection structure |
-| Graph | 17 | nested router paths, dynamic routes flagged, evidence + resolution on every edge, parser never executes code |
-| GitHub/LLM clients | 17 | status classification, redirect host allow-list, token not forwarded, retry/backoff/repair/budget |
+| AI layer | 25 | provider fallback, model + prompt version, semantic retrieval, prompt-injection defences |
+| Change impact | 24 | default parent base, explicit refs, hostile refs rejected before any GitHub call, isolation, rate limit |
+| GitHub/LLM clients and LLM errors | 22 | status classification, redirect host allow-list, retry/backoff/repair/budget, quota-exhausted handling |
+| Q&A, confidence and retrieval determinism | 21 | retrieval bounds, citation validation, rejected hallucinated citations, retrieval-only fallback |
+| UI contracts | 19 | fields read by the screens, filter semantics, evidence links resolve, CSRF, ownership |
+| Security API | 18 | Argon2id, cookie flags, session revocation, CSRF, rate limits, headers/CSP, body cap, internal auth |
+| Graph | 17 | nested router paths, dynamic routes flagged, evidence + resolution on every edge |
 | Config | 16 | production validation; `.env.example` parsing regression |
 | Lifecycle | 15 | full pipeline via the exact n8n calls, ownership on every route, retries, cancel, delete cascade |
-| Readiness | 14 | evidence mandatory, absence needs basis, security never "confirmed", no secret values in report |
+| Accounts | 15 | verification, reset, TOTP (RFC 6238 vector), recovery codes, rate limits, replay |
+| Readiness | 14 | evidence mandatory, absence needs basis, security never "confirmed" |
+| Defect regression | 11 | parser recovery, deterministic retrieval, SQLModel ORM, `os.getenv`, auth recognition |
+| Pull-request review | 11 | drift findings, review priority, evaluation of PR reviews |
 | Archive | 10 | file/size limits → partial, symlinks/traversal skipped, decompression bomb |
-| Recovery + migrations | 9 | lease expiry, crash mid-pipeline, n8n unreachable, `alembic check`, downgrade/upgrade |
-| Workflows (new) | 7 | generator in sync, every node reachable from its webhook, secrets only from n8n env |
+| Incremental indexing and tenant isolation | 9 | diff, reuse, full reindex, 11 endpoints × other user → 404 |
+| Recovery + migrations | 9 | lease expiry, crash mid-pipeline, `alembic check`, downgrade/upgrade |
+| Admin and quotas | 9 | admin-only API, abuse switch, daily quotas, per-route rate limits |
+| Architecture drift | 8 | cycles, dependencies, boundary violations, breaking changes |
+| Workflows | 7 | generator in sync, every node reachable, secrets only from n8n env |
+| Map and review verdict | 7 | area classification, grouping, map endpoint, owner-only, verdict levels |
 | Secrets/filters | 6 | token/PEM/JWT redaction keeps line numbers |
-| Evaluation harness (new) | 26 (+1 opt-in) | metric maths, benchmark integrity (stale labels detected), cost/usage, rate limiting, judge timeout/retry/credential reporting, thresholds/baselines; smoke evaluation regression with known defects pinned; DeepEval wiring (opt-in) |
-| Defect regression tests (new, 2026-10-27 / 2026-11-01) | 13 | parser recovery with exact locations and honest reporting, deterministic retrieval across re-analyses, evidence inside file bounds, SQLModel ORM via base class, `os.getenv` rule, line counts, auth via `Annotated` aliases and superuser dependencies |
-| Accounts (new, 2026-11-01) | 15 | verification, reset, TOTP (RFC 6238 vector), recovery codes, rate limits, replay |
-| AI layer (new, 2026-11-01) | 25 | fallback and second provider, model + prompt version, semantic retrieval, prompt-injection defences |
-| **Total** | **428 (+1)** | |
+| Answer and embedding caches | 6 | hit across users, fallbacks never cached, disable switch |
+| Monitoring | 6 | route labels, percentiles, bucket pruning, Prometheus auth |
+| **Total** | **490 (+1 opt-in, skipped)** | |
 
 These tests use fakes for GitHub and the LLM (HTTP mock transports) and emulate n8n by issuing its exact internal calls.
 
@@ -67,9 +75,10 @@ flowchart LR
 `python -m evals run --suite smoke --repeats 3` on benchmark v1: 3 repositories, 1 of them the real `fastapi/full-stack-fastapi-template` backend; 27 questions; 5 impact scenarios. Runs:
 - baseline `ab282dbf401f` (2026-10-26): 22/22 gates;
 - after defect fixes 1–4, `ef5411364870` (2026-10-27): 21/22 gates;
-- **after fix 5, `50744a933fd3` (2026-11-01): 22/22 gates under raised floors.**
+- after fix 5, `50744a933fd3` (2026-11-01): 22/22 gates under raised floors;
+- **current, `27e096d5db28` (2026-11-25): 22/22 gates, scores identical to 2026-11-01 (the suite is deterministic).**
 
-Reports: [baseline](results/2026-10-26-smoke-retrieval-only/report.md), [fixes 1–4](results/2026-10-27-smoke-after-defect-fixes/report.md), [current](results/2026-11-01-smoke-after-auth-fix/report.md). Detail: [AI_EVALUATION.md §9](AI_EVALUATION.md#9-results-baseline-and-after-each-round-of-defect-fixes).
+Reports: [baseline](results/2026-10-26-smoke-retrieval-only/report.md), [fixes 1–4](results/2026-10-27-smoke-after-defect-fixes/report.md), [fix 5](results/2026-11-01-smoke-after-auth-fix/report.md), [current](results/2026-11-25-smoke-current/report.md). Detail: [AI_EVALUATION.md §9](AI_EVALUATION.md#9-results-baseline-and-after-each-round-of-defect-fixes).
 
 | Area | Baseline | Current (n = labelled items) |
 |---|---|---|
@@ -122,7 +131,8 @@ Five defects found by the benchmark were fixed with regression tests. The fifth 
 | Live Anthropic API (AI explanations, AI answers, inferred-claim extraction) | Exercised only against mock transports. The "AI answer + inferred" UI was checked in the browser with a stubbed response. |
 | Answer quality of AI answers (correctness, key-fact recall, abstention, faithfulness, relevancy) | Not measured. The harness supports it (`--sut live`, DeepEval judge); it was not run because no API keys were available. DeepEval's metric classes were exercised offline with a scripted judge model (wiring only). |
 | Readiness / graph / impact accuracy beyond benchmark v1 | Measured only on 3 repositories (§2b); not a general estimate. |
-| GitHub Actions CI (including the new evaluation smoke job and the opt-in `eval-live` workflow) | Workflow files defined and YAML-validated; never executed on GitHub. |
+| GitHub Actions CI (including the evaluation smoke job and the opt-in `eval-live` workflow) | Executed once on the public repository (2026-11-24): the backend job failed at the lint step because of a test-fixture import issue, fixed in commit `1021a57`; a green run is not yet recorded. `eval-live` has never run. |
+| Public deployment, real HTTPS certificate, real SMTP delivery | Not done. A from-scratch image build succeeded (2026-11-25). |
 | Linux Docker hosts, TLS proxy, upgrades of existing volumes | Not tested. |
 | Load / concurrency beyond unit tests; accessibility audit; non-Chromium browsers | Not tested. |
 
@@ -131,9 +141,9 @@ Five defects found by the benchmark were fixed with regression tests. The fifth 
 - The parser runs on Python 3.12; newer syntax is reported as a parse failure (1 file in the run above).
 - Only Python/FastAPI is modelled; only public GitHub repositories at default-branch HEAD.
 - Secret redaction is best-effort pattern matching.
-- Retrieval is lexical (full-text + exact match + graph neighbours), not semantic.
+- Retrieval is lexical by default (full-text + exact match + graph neighbours); semantic retrieval is optional and unmeasured.
 - Impact does not trace former dependents of deleted/renamed files; GitHub compare caps at 300 files.
-- No email verification, password reset or MFA.
+- Email verification, password reset and TOTP exist but real email delivery is untested.
 - The Guide still scrolls horizontally at 375 px (wide diagrams/tables).
 
 ## 7. Future improvements

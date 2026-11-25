@@ -10,6 +10,9 @@
 | [evaluation/EVALUATION_AND_RESULTS.md](evaluation/EVALUATION_AND_RESULTS.md) | Verified results vs. untested capabilities, limitations, future work |
 | [evaluation/AI_EVALUATION.md](evaluation/AI_EVALUATION.md) | AI evaluation framework: benchmark, metric definitions, commands, thresholds, judge limitations, latest scores and the defects they exposed |
 
+## Project management
+The complete project-management pack is in **[project/](project/README.md)**: charter, PRD, roadmap, milestones, product backlog, risk register, decision log, QA report, traceability matrix, release readiness and closure report.
+
 ## Operate and present
 | Document | Content |
 |---|---|
